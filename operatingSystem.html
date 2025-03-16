@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Operating Systems Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f4d6;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        body.light-mode {
+            background-color: #f5f4d6;
+            color: #1a1a1a;
+        }
+        body.light-mode::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 10% 10%, #a6c1ee, transparent 30%),
+                        radial-gradient(circle at 90% 10%, #ffffff, transparent 30%),
+                        radial-gradient(circle at 50% 120%, #ff9f43, transparent 50%);
+            filter: blur(80px);
+            opacity: 0.8;
+        }
+        .header {
+            padding: 10px 20px;
+            background-color: #1a1a1a;
+        }
+        .light-mode .header {
+            background-color: #f5f4d6;
+        }
+        .quiz-title {
+            font-size: 55pt;
+            font-weight: 800;
+            margin-top: 130px;
+        }
+        .toogle img {
+            width: 7%;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            cursor: pointer;
+        }
+        .content {
+            margin-top: 20px;
+            padding: 20px;
+        }
+        .question-container {
+            margin-left: 60px;
+            margin-right: 60px;
+            margin-top: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .light-mode .question-container {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 55px;
+            color: lightgray;
+            margin: 0;
+        }
+        .light-mode .question {
+            color: gray;
+        }
+        .answers {
+            margin-left: 60px;
+            margin-top: 70px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .answer-button {
+            width: 100%;
+            max-width: 855px;
+            height: auto;
+            font-size: 35px;
+            padding: 25px 30px;
+            color: lightgray;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid #f5f4d6;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-align: left;
+        }
+        .light-mode .answer-button {
+            color: gray;
+            border-color: #1a1a1a;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        .answer-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .light-mode .answer-button:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .correct::after {
+            content: " ✔️";
+            color: green;
+        }
+        .incorrect::after {
+            content: " ❌";
+            color: red;
+        }
+        .next-button, .repeat-button, .back-button {
+            margin-left: 60px;
+            margin-top: 30px;
+            padding: 20px 25px;
+            font-size: 35px;
+            color: lightgray;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-align: center;
+            width: 855px;
+            height: auto;
+            border: none;
+        }
+        .next-button {
+            background-color: green;
+        }
+        .next-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .light-mode .next-button {
+            color: gray;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        .next-button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .light-mode .next-button:hover:not(:disabled) {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .repeat-button {
+            background-color: green;
+        }
+        .repeat-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .back-button {
+            background-color: wheat;
+            color: #1a1a1a;
+            margin-top: 15px;
+        }
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="quiz-title">Operating Systems Quiz</div>
+        <div class="toogle">
+            <img id="toggleImg" src="brightness.png" alt="Toggle Mode">
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <div id="question-container" class="question-container">
+            <div class="question" id="question-text"></div>
+        </div>
+        <div id="answers" class="answers"></div>
+        <button id="next-button" class="next-button" disabled>Next</button>
+    </div>
+
+    <!-- Audio Files -->
+    <audio id="correct-sound" src="correct-6033 (1).mp3" preload="auto"></audio>
+    <audio id="incorrect-sound" src="wrong-47985.mp3" preload="auto"></audio>
+
+    <!-- JavaScript -->
+    <script>
+        const quizData = [
+            // Set 1: Operating System Basics (Questions 1-20)
+            {
+                question: "1. What is the primary role of an operating system?",
+                answers: [
+                    { text: "a) To provide a user interface for gaming", correct: false },
+                    { text: "b) To act as an intermediary between the user and computer hardware", correct: true },
+                    { text: "c) To design computer hardware", correct: false },
+                    { text: "d) To develop application software", correct: false }
+                ]
+            },
+            {
+                question: "2. Which of the following is NOT a goal of an operating system?",
+                answers: [
+                    { text: "a) Execute user programs and make solving user problems easier", correct: false },
+                    { text: "b) Make the computer system convenient to use", correct: false },
+                    { text: "c) Use the computer hardware in an efficient manner", correct: false },
+                    { text: "d) Increase the cost of hardware resources", correct: true }
+                ]
+            },
+            {
+                question: "3. Which component of a computer system provides basic computing resources such as CPU and memory?",
+                answers: [
+                    { text: "a) Operating system", correct: false },
+                    { text: "b) Application programs", correct: false },
+                    { text: "c) Hardware", correct: true },
+                    { text: "d) Users", correct: false }
+                ]
+            },
+            {
+                question: "4. What is the main function of an operating system in relation to hardware?",
+                answers: [
+                    { text: "a) To design new hardware components", correct: false },
+                    { text: "b) To control and coordinate the use of hardware among applications and users", correct: true },
+                    { text: "c) To replace hardware components", correct: false },
+                    { text: "d) To sell hardware to users", correct: false }
+                ]
+            },
+            {
+                question: "5. Which of the following is an example of an application program?",
+                answers: [
+                    { text: "a) Operating system kernel", correct: false },
+                    { text: "b) Device driver", correct: false },
+                    { text: "c) Web browser", correct: true },
+                    { text: "d) Bootstrap program", correct: false }
+                ]
+            },
+            {
+                question: "6. What is the role of the kernel in an operating system?",
+                answers: [
+                    { text: "a) It is a program that runs only when the computer starts", correct: false },
+                    { text: "b) It is the one program running at all times on the computer", correct: true },
+                    { text: "c) It is a type of application program", correct: false },
+                    { text: "d) It is used only for gaming purposes", correct: false }
+                ]
+            },
+            {
+                question: "7. What is the purpose of a device driver in an operating system?",
+                answers: [
+                    { text: "a) To manage the CPU", correct: false },
+                    { text: "b) To provide a uniform interface between a device controller and the kernel", correct: true },
+                    { text: "c) To design new hardware devices", correct: false },
+                    { text: "d) To replace the operating system", correct: false }
+                ]
+            },
+            {
+                question: "8. What is the function of the bootstrap program in a computer system?",
+                answers: [
+                    { text: "a) To load the operating system kernel into memory", correct: true },
+                    { text: "b) To manage application programs", correct: false },
+                    { text: "c) To design hardware components", correct: false },
+                    { text: "d) To provide user interfaces", correct: false }
+                ]
+            },
+            {
+                question: "9. What is the purpose of multiprogramming in an operating system?",
+                answers: [
+                    { text: "a) To allow multiple users to use the same application simultaneously", correct: false },
+                    { text: "b) To organize jobs so that the CPU always has one to execute", correct: true },
+                    { text: "c) To increase the cost of hardware resources", correct: false },
+                    { text: "d) To reduce the need for memory management", correct: false }
+                ]
+            },
+            {
+                question: "10. What is the primary purpose of a timer in an operating system?",
+                answers: [
+                    { text: "a) To display the current time to the user", correct: false },
+                    { text: "b) To prevent infinite loops or processes hogging resources", correct: true },
+                    { text: "c) To manage file systems", correct: false },
+                    { text: "d) To design hardware components", correct: false }
+                ]
+            },
+            {
+                question: "11. What is a process in the context of an operating system?",
+                answers: [
+                    { text: "a) A passive entity that represents a program", correct: false },
+                    { text: "b) A program in execution, which is an active entity", correct: true },
+                    { text: "c) A type of hardware component", correct: false },
+                    { text: "d) A user interface for managing files", correct: false }
+                ]
+            },
+            {
+                question: "12. What is the purpose of virtual memory in an operating system?",
+                answers: [
+                    { text: "a) To replace physical memory entirely", correct: false },
+                    { text: "b) To allow execution of processes that are not completely in memory", correct: true },
+                    { text: "c) To increase the speed of the CPU", correct: false },
+                    { text: "d) To design new hardware components", correct: false }
+                ]
+            },
+            {
+                question: "13. What is the primary function of a file system in an operating system?",
+                answers: [
+                    { text: "a) To manage hardware resources", correct: false },
+                    { text: "b) To provide a uniform, logical view of information storage", correct: true },
+                    { text: "c) To design application programs", correct: false },
+                    { text: "d) To replace the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "14. What is caching in the context of computer systems?",
+                answers: [
+                    { text: "a) Copying information into faster storage temporarily", correct: true },
+                    { text: "b) Replacing hardware components", correct: false },
+                    { text: "c) Designing new operating systems", correct: false },
+                    { text: "d) Managing user interfaces", correct: false }
+                ]
+            },
+            {
+                question: "15. What is the purpose of dual-mode operation in an operating system?",
+                answers: [
+                    { text: "a) To allow the OS to protect itself and other system components", correct: true },
+                    { text: "b) To replace the kernel with application programs", correct: false },
+                    { text: "c) To design new hardware components", correct: false },
+                    { text: "d) To increase the cost of hardware resources", correct: false }
+                ]
+            },
+            {
+                question: "16. What is the primary purpose of a network operating system?",
+                answers: [
+                    { text: "a) To manage hardware resources", correct: false },
+                    { text: "b) To provide features for systems to communicate across a network", correct: true },
+                    { text: "c) To design application programs", correct: false },
+                    { text: "d) To replace the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "17. What is the advantage of multiprocessor systems?",
+                answers: [
+                    { text: "a) Increased throughput and economy of scale", correct: true },
+                    { text: "b) Increased cost of hardware resources", correct: false },
+                    { text: "c) Reduced need for memory management", correct: false },
+                    { text: "d) Slower processing speeds", correct: false }
+                ]
+            },
+            {
+                question: "18. What is the primary purpose of clustering in computer systems?",
+                answers: [
+                    { text: "a) To increase the cost of hardware resources", correct: false },
+                    { text: "b) To provide high-availability services that survive failures", correct: true },
+                    { text: "c) To replace the operating system kernel", correct: false },
+                    { text: "d) To design application programs", correct: false }
+                ]
+            },
+            {
+                question: "19. What is the primary characteristic of a real-time operating system?",
+                answers: [
+                    { text: "a) It has no time constraints", correct: false },
+                    { text: "b) It has well-defined fixed time constraints for processing", correct: true },
+                    { text: "c) It is used only for gaming purposes", correct: false },
+                    { text: "d) It replaces the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "20. What is the primary purpose of open-source operating systems?",
+                answers: [
+                    { text: "a) To increase the cost of software", correct: false },
+                    { text: "b) To provide software in source-code format for modification and distribution", correct: true },
+                    { text: "c) To replace hardware components", correct: false },
+                    { text: "d) To design application programs", correct: false }
+                ]
+            },
+            // Set 2: Threads (Questions 21-35)
+            {
+                question: "21. What is a process in the context of an operating system?",
+                answers: [
+                    { text: "a) A passive entity that represents a program", correct: false },
+                    { text: "b) An instance of a program, replete with registers, variables, and a program counter", correct: true },
+                    { text: "c) A type of hardware component", correct: false },
+                    { text: "d) A user interface for managing files", correct: false }
+                ]
+            },
+            {
+                question: "22. What is the main reason for having threads in an operating system?",
+                answers: [
+                    { text: "a) To replace processes entirely", correct: false },
+                    { text: "b) To allow multiple activities to occur concurrently within a single address space", correct: true },
+                    { text: "c) To design new hardware components", correct: false },
+                    { text: "d) To increase the cost of hardware resources", correct: false }
+                ]
+            },
+            {
+                question: "23. Why are threads sometimes referred to as lightweight processes?",
+                answers: [
+                    { text: "a) They are easier to create and destroy compared to processes", correct: true },
+                    { text: "b) They replace the operating system kernel", correct: false },
+                    { text: "c) They are used only for gaming purposes", correct: false },
+                    { text: "d) They increase the cost of hardware resources", correct: false }
+                ]
+            },
+            {
+                question: "24. What is one advantage of using threads in a multiprocessor system?",
+                answers: [
+                    { text: "a) Increased cost of hardware resources", correct: false },
+                    { text: "b) They promote the benefits of parallelism", correct: true },
+                    { text: "c) They replace the operating system kernel", correct: false },
+                    { text: "d) They are used only for gaming purposes", correct: false }
+                ]
+            },
+            {
+                question: "25. Which of the following is NOT a state of a thread?",
+                answers: [
+                    { text: "a) Running", correct: false },
+                    { text: "b) Ready", correct: false },
+                    { text: "c) Blocked", correct: false },
+                    { text: "d) Terminated", correct: true }
+                ]
+            },
+            {
+                question: "26. What does the thread_create library call do?",
+                answers: [
+                    { text: "a) It causes a thread to exit and disappear", correct: false },
+                    { text: "b) It blocks a thread until another thread finishes its work", correct: false },
+                    { text: "c) It creates a new thread and specifies the procedure to run", correct: true },
+                    { text: "d) It replaces the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "27. What is the purpose of the thread_join library call?",
+                answers: [
+                    { text: "a) It creates a new thread", correct: false },
+                    { text: "b) It causes a thread to exit and disappear", correct: false },
+                    { text: "c) It blocks a thread until another thread finishes its work", correct: true },
+                    { text: "d) It replaces the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "28. What is one problem with user-level threads?",
+                answers: [
+                    { text: "a) They cannot execute system calls that block", correct: true },
+                    { text: "b) They are slower to create and destroy compared to processes", correct: false },
+                    { text: "c) They increase the cost of hardware resources", correct: false },
+                    { text: "d) They replace the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "29. What is the role of the thread table in managing threads?",
+                answers: [
+                    { text: "a) It stores information about threads, such as the program counter and stack pointer", correct: true },
+                    { text: "b) It replaces the operating system kernel", correct: false },
+                    { text: "c) It increases the cost of hardware resources", correct: false },
+                    { text: "d) It is used only for gaming purposes", correct: false }
+                ]
+            },
+            {
+                question: "30. What is one solution to prevent threads from blocking all other threads when executing a system call?",
+                answers: [
+                    { text: "a) Hack the system library to avoid blocking calls", correct: true },
+                    { text: "b) Replace the operating system kernel", correct: false },
+                    { text: "c) Increase the cost of hardware resources", correct: false },
+                    { text: "d) Use threads only for gaming purposes", correct: false }
+                ]
+            },
+            {
+                question: "31. What is the primary difference between user-level threads and kernel-level threads?",
+                answers: [
+                    { text: "a) User-level threads are scheduled, created, and destroyed independently of the kernel", correct: true },
+                    { text: "b) Kernel-level threads are easier to create and destroy compared to user-level threads", correct: false },
+                    { text: "c) User-level threads replace the operating system kernel", correct: false },
+                    { text: "d) Kernel-level threads are used only for gaming purposes", correct: false }
+                ]
+            },
+            {
+                question: "32. What is one issue that threads and processes share?",
+                answers: [
+                    { text: "a) How to deal with process conflicts, such as two airline reservations for the same seat", correct: true },
+                    { text: "b) How to replace the operating system kernel", correct: false },
+                    { text: "c) How to increase the cost of hardware resources", correct: false },
+                    { text: "d) How to design new hardware components", correct: false }
+                ]
+            },
+            {
+                question: "33. What is the purpose of the thread_yield library call?",
+                answers: [
+                    { text: "a) It causes a thread to exit and disappear", correct: false },
+                    { text: "b) It blocks a thread until another thread finishes its work", correct: false },
+                    { text: "c) It allows a thread to voluntarily give up the CPU", correct: true },
+                    { text: "d) It replaces the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "34. What is one advantage of using threads in a system with a mix of CPU-bound and I/O-bound tasks?",
+                answers: [
+                    { text: "a) They improve system performance", correct: true },
+                    { text: "b) They increase the cost of hardware resources", correct: false },
+                    { text: "c) They replace the operating system kernel", correct: false },
+                    { text: "d) They are used only for gaming purposes", correct: false }
+                ]
+            },
+            {
+                question: "35. What is one problem with threads not voluntarily giving up the CPU?",
+                answers: [
+                    { text: "a) They can monopolize the CPU, requiring periodic interrupts to give control to the runtime system", correct: true },
+                    { text: "b) They increase the cost of hardware resources", correct: false },
+                    { text: "c) They replace the operating system kernel", correct: false },
+                    { text: "d) They are used only for gaming purposes", correct: false }
+                ]
+            },
+            // Set 3: Processes & IPC (Questions 36-55)
+            {
+                question: "36. What is a process in the context of an operating system?",
+                answers: [
+                    { text: "a) A passive entity stored on disk", correct: false },
+                    { text: "b) An instance of a program in execution", correct: true },
+                    { text: "c) A type of hardware component", correct: false },
+                    { text: "d) A user interface for managing files", correct: false }
+                ]
+            },
+            {
+                question: "37. Which of the following is NOT part of a process's memory layout?",
+                answers: [
+                    { text: "a) Text section (program code)", correct: false },
+                    { text: "b) Stack", correct: false },
+                    { text: "c) Heap", correct: false },
+                    { text: "d) BIOS", correct: true }
+                ]
+            },
+            {
+                question: "38. What is the state of a process when it is waiting for an event to occur?",
+                answers: [
+                    { text: "a) New", correct: false },
+                    { text: "b) Running", correct: false },
+                    { text: "c) Waiting", correct: true },
+                    { text: "d) Terminated", correct: false }
+                ]
+            },
+            {
+                question: "39. What is stored in the Process Control Block (PCB)?",
+                answers: [
+                    { text: "a) The program code of the process", correct: false },
+                    { text: "b) The state of the process, program counter, CPU registers, and scheduling information", correct: true },
+                    { text: "c) The BIOS settings of the computer", correct: false },
+                    { text: "d) The user interface of the operating system", correct: false }
+                ]
+            },
+            {
+                question: "40. What is the purpose of a context switch in an operating system?",
+                answers: [
+                    { text: "a) To replace the operating system kernel", correct: false },
+                    { text: "b) To save the state of the current process and load the state of the next process", correct: true },
+                    { text: "c) To increase the cost of hardware resources", correct: false },
+                    { text: "d) To design new hardware components", correct: false }
+                ]
+            },
+            {
+                question: "41. What is the primary purpose of the fork() system call in UNIX?",
+                answers: [
+                    { text: "a) To terminate a process", correct: false },
+                    { text: "b) To create a new process (child process)", correct: true },
+                    { text: "c) To replace the process's memory space with a new program", correct: false },
+                    { text: "d) To wait for a child process to terminate", correct: false }
+                ]
+            },
+            {
+                question: "42. What happens when a process executes the exit() system call?",
+                answers: [
+                    { text: "a) It creates a new process", correct: false },
+                    { text: "b) It terminates the process and deallocates its resources", correct: true },
+                    { text: "c) It waits for a child process to terminate", correct: false },
+                    { text: "d) It replaces the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "43. What is a zombie process?",
+                answers: [
+                    { text: "a) A process that has terminated but whose parent has not yet called wait()", correct: true },
+                    { text: "b) A process that is running in the background", correct: false },
+                    { text: "c) A process that is waiting for an event to occur", correct: false },
+                    { text: "d) A process that is creating new child processes", correct: false }
+                ]
+            },
+            {
+                question: "44. What is the primary purpose of interprocess communication (IPC)?",
+                answers: [
+                    { text: "a) To replace the operating system kernel", correct: false },
+                    { text: "b) To allow processes to share data and coordinate their activities", correct: true },
+                    { text: "c) To increase the cost of hardware resources", correct: false },
+                    { text: "d) To design new hardware components", correct: false }
+                ]
+            },
+            {
+                question: "45. Which of the following is a model of IPC?",
+                answers: [
+                    { text: "a) Shared memory and message passing", correct: true },
+                    { text: "b) BIOS and kernel", correct: false },
+                    { text: "c) CPU and GPU", correct: false },
+                    { text: "d) Stack and heap", correct: false }
+                ]
+            },
+            {
+                question: "46. In the producer-consumer problem, what happens in a bounded-buffer scenario when the buffer is full?",
+                answers: [
+                    { text: "a) The producer continues to produce without waiting", correct: false },
+                    { text: "b) The producer waits until there is space in the buffer", correct: true },
+                    { text: "c) The consumer waits until the buffer is full", correct: false },
+                    { text: "d) The consumer continues to consume without waiting", correct: false }
+                ]
+            },
+            {
+                question: "47. What is the primary advantage of using shared memory for IPC?",
+                answers: [
+                    { text: "a) It requires no synchronization mechanisms", correct: false },
+                    { text: "b) It is faster than message passing because it avoids copying data", correct: true },
+                    { text: "c) It is easier to implement than message passing", correct: false },
+                    { text: "d) It replaces the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "48. What is a blocking send in message passing?",
+                answers: [
+                    { text: "a) The sender continues execution immediately after sending the message", correct: false },
+                    { text: "b) The sender is blocked until the message is received", correct: true },
+                    { text: "c) The receiver continues execution immediately after receiving the message", correct: false },
+                    { text: "d) The receiver is blocked until the message is sent", correct: false }
+                ]
+            },
+            {
+                question: "49. What is a mailbox in the context of message passing?",
+                answers: [
+                    { text: "a) A shared memory area used for communication", correct: false },
+                    { text: "b) A unique identifier used for sending and receiving messages", correct: true },
+                    { text: "c) A type of hardware component", correct: false },
+                    { text: "d) A user interface for managing files", correct: false }
+                ]
+            },
+            {
+                question: "50. What is the primary purpose of a pipe in IPC?",
+                answers: [
+                    { text: "a) To replace the operating system kernel", correct: false },
+                    { text: "b) To allow communication between two processes in a producer-consumer style", correct: true },
+                    { text: "c) To increase the cost of hardware resources", correct: false },
+                    { text: "d) To design new hardware components", correct: false }
+                ]
+            },
+            {
+                question: "51. What is a socket in the context of networking?",
+                answers: [
+                    { text: "a) A type of hardware component", correct: false },
+                    { text: "b) An endpoint for communication, defined by an IP address and port", correct: true },
+                    { text: "c) A shared memory area used for communication", correct: false },
+                    { text: "d) A user interface for managing files", correct: false }
+                ]
+            },
+            {
+                question: "52. What is the primary purpose of a Remote Procedure Call (RPC)?",
+                answers: [
+                    { text: "a) To replace the operating system kernel", correct: false },
+                    { text: "b) To abstract procedure calls between processes on networked systems", correct: true },
+                    { text: "c) To increase the cost of hardware resources", correct: false },
+                    { text: "d) To design new hardware components", correct: false }
+                ]
+            },
+            {
+                question: "53. What is the role of a stub in RPC?",
+                answers: [
+                    { text: "a) To replace the operating system kernel", correct: false },
+                    { text: "b) To act as a client-side proxy for the actual procedure on the server", correct: true },
+                    { text: "c) To increase the cost of hardware resources", correct: false },
+                    { text: "d) To design new hardware components", correct: false }
+                ]
+            },
+            {
+                question: "54. What is the primary issue with shared memory for IPC?",
+                answers: [
+                    { text: "a) It requires no synchronization mechanisms", correct: false },
+                    { text: "b) It is slower than message passing", correct: false },
+                    { text: "c) It requires mechanisms to synchronize access to shared data", correct: true },
+                    { text: "d) It replaces the operating system kernel", correct: false }
+                ]
+            },
+            {
+                question: "55. What is the primary advantage of using message passing for IPC?",
+                answers: [
+                    { text: "a) It avoids the need for synchronization mechanisms", correct: true },
+                    { text: "b) It is faster than shared memory", correct: false },
+                    { text: "c) It is easier to implement than shared memory", correct: false },
+                    { text: "d) It replaces the operating system kernel", correct: false }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        const questionText = document.getElementById("question-text");
+        const answersContainer = document.getElementById("answers");
+        const nextButton = document.getElementById("next-button");
+        const correctSound = document.getElementById("correct-sound");
+        const incorrectSound = document.getElementById("incorrect-sound");
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            questionText.textContent = currentQuestion.question;
+            answersContainer.innerHTML = "";
+            nextButton.disabled = true;
+
+            currentQuestion.answers.forEach((answer) => {
+                const button = document.createElement("button");
+                button.textContent = answer.text;
+                button.classList.add("answer-button");
+                button.dataset.correct = answer.correct;
+                button.addEventListener("click", selectAnswer);
+                answersContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(event) {
+            const selectedButton = event.target;
+            const isCorrect = selectedButton.dataset.correct === "true";
+
+            if (isCorrect) {
+                selectedButton.classList.add("correct");
+                correctSound.play();
+                score++;
+            } else {
+                selectedButton.classList.add("incorrect");
+                incorrectSound.play();
+            }
+
+            Array.from(answersContainer.children).forEach((button) => {
+                button.disabled = true;
+            });
+
+            nextButton.disabled = false;
+        }
+
+        nextButton.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showScore();
+            }
+        });
+
+        function showScore() {
+            questionText.textContent = "Quiz Completed!";
+            answersContainer.innerHTML = `<p style="font-size:45px;">Your Score: ${score} / ${quizData.length}</p>`;
+            nextButton.style.display = "none";
+
+            // Repeat Quiz button (green)
+            const repeatButton = document.createElement("button");
+            repeatButton.textContent = "Repeat Quiz";
+            repeatButton.classList.add("repeat-button");
+            repeatButton.addEventListener("click", () => {
+                currentQuestionIndex = 0;
+                score = 0;
+                nextButton.style.display = "block";
+                loadQuestion();
+            });
+            answersContainer.appendChild(repeatButton);
+
+            // Back to Menu button (wheat color)
+            const backButton = document.createElement("button");
+            backButton.textContent = "Back to Menu";
+            backButton.classList.add("back-button");
+            backButton.addEventListener("click", () => {
+                window.location.href = "mainpage.html";
+            });
+            answersContainer.appendChild(backButton);
+        }
+
+        loadQuestion();
+
+        const toggleImg = document.getElementById("toggleImg");
+        const body = document.body;
+        toggleImg.addEventListener("click", () => {
+            body.classList.toggle("light-mode");
+            toggleImg.src = body.classList.contains("light-mode") ? "night-mode.png" : "brightness.png";
+        });
+    </script>
+</body>
+</html>

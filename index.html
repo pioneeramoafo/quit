@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Question Bank</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@100..800&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Playwrite+AU+SA:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sixtyfour&display=swap" rel="stylesheet">
+        <style type="text/css">
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                flex-direction: column;
+            }
+            .heading {
+                font-size: 80pt;
+                background: linear-gradient(to right, pink, rebeccapurple);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+                font-family: "Poppins", serif;
+                font-weight: 900;
+                margin-top: -50px;
+            }
+            .ex-text {
+                font-size: 8pt;
+                color: #bab7b7;
+                font-family: "Exo 2";
+                text-align: center;
+                margin-top: -50px;
+                margin-right: 10px;
+            }
+            .loader {
+                height: 40px;
+                aspect-ratio: 6;
+                display: flex;
+                margin-top: 60px;
+                opacity: 0; /* Initially hidden */
+                transition: opacity 0.5s ease-in-out;
+            }
+            .loader:before,
+            .loader:after {
+                content: "";
+                flex: 1;
+                padding-left: calc(100%/6);
+                background: radial-gradient(closest-side at calc(100%/3) 50%, #fff 90%, #0000) 0/75% 100% content-box;
+                animation: l20 2s infinite;
+            }
+            .loader:after {
+                --_s: -1;
+            }
+            @keyframes l20 {
+                0%       { transform: scale(var(--_s,1)) translate(0) rotate(0); }
+                25%      { transform: scale(var(--_s,1)) translate(-25%) rotate(0); }
+                50%      { transform: scale(var(--_s,1)) translate(-25%) rotate(1turn); }
+                75%,100% { transform: scale(var(--_s,1)) translate(0) rotate(1turn); }
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class="heading">Question Bank</h1>
+        <p class="ex-text">
+            This is your ultimate study companion, designed to help students access past questions and answers effortlessly. With a user-friendly interface, it provides a comprehensive collection of exam materials to boost your preparation and confidence.
+        </p>
+        <div class="loader" id="loader"></div>
+
+        <script>
+            // Show the loader after 3 seconds
+            setTimeout(() => {
+                document.getElementById("loader").style.opacity = "1";
+            }, 3000);
+
+            // Redirect to another HTML file after 6 seconds
+            setTimeout(() => {
+                window.location.href = "another-page.html"; // Replace with your desired file name
+            }, 9000);
+        </script>
+    </body>
+</html>

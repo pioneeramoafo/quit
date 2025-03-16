@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forecasting Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background-color: #1a1a1a;
+            color: #f5f4d6;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        body.light-mode {
+            background-color: #f5f4d6;
+            color: #1a1a1a;
+        }
+        body.light-mode::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 10% 10%, #a6c1ee, transparent 30%),
+                        radial-gradient(circle at 90% 10%, #ffffff, transparent 30%),
+                        radial-gradient(circle at 50% 120%, #ff9f43, transparent 50%);
+            filter: blur(80px);
+            opacity: 0.8;
+        }
+        .header {
+            padding: 10px 20px;
+            background-color: #1a1a1a;
+        }
+        .light-mode .header {
+            background-color: #f5f4d6;
+        }
+        .quiz-title {
+            font-size: 55pt;
+            font-weight: 800;
+            margin-top: 130px;
+        }
+        .toogle img {
+            width: 7%;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            cursor: pointer;
+        }
+        .content {
+            margin-top: 20px;
+            padding: 20px;
+        }
+        .question-container {
+            margin: 0 60px 40px 60px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .light-mode .question-container {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 55px;
+            color: lightgray;
+            margin: 0;
+        }
+        .light-mode .question {
+            color: gray;
+        }
+        .answers {
+            margin: 0 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .answer-button {
+            width: 100%;
+            max-width: 855px;
+            font-size: 35px;
+            padding: 25px 30px;
+            color: lightgray;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid #f5f4d6;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-align: left;
+        }
+        .light-mode .answer-button {
+            color: gray;
+            border-color: #1a1a1a;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        .answer-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .light-mode .answer-button:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .correct::after {
+            content: " ✔️";
+            color: green;
+        }
+        .incorrect::after {
+            content: " ❌";
+            color: red;
+        }
+        .next-button, .repeat-button, .back-button {
+            margin: 30px 60px 0 60px;
+            padding: 20px 25px;
+            font-size: 35px;
+            color: lightgray;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-align: center;
+            max-width: 855px;
+            border: none;
+        }
+        .next-button {
+            background-color: green;
+        }
+        .next-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .light-mode .next-button {
+            color: gray;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        .next-button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .light-mode .next-button:hover:not(:disabled) {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .repeat-button {
+            background-color: green;
+        }
+        .repeat-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .back-button {
+            background-color: wheat;
+            color: #1a1a1a;
+            margin-top: 15px;
+        }
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="quiz-title">Forecasting Quiz</div>
+        <div class="toogle">
+            <img id="toggleImg" src="brightness.png" alt="Toggle Mode">
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <div id="question-container" class="question-container">
+            <div class="question" id="question-text"></div>
+        </div>
+        <div id="answers" class="answers"></div>
+        <button id="next-button" class="next-button" disabled>Next</button>
+    </div>
+
+    <!-- Audio Files -->
+    <audio id="correct-sound" src="correct-6033 (1).mp3" preload="auto"></audio>
+    <audio id="incorrect-sound" src="wrong-47985.mp3" preload="auto"></audio>
+
+    <!-- JavaScript -->
+    <script>
+        const quizData = [
+            // Set 1: Questions 1 - 20
+            {
+                question: "1. What is forecasting?",
+                answers: [
+                    { text: "a) Analyzing past events to understand historical trends", correct: false },
+                    { text: "b) Determining future events based on historical facts and data", correct: true },
+                    { text: "c) Replacing historical data with future predictions", correct: false },
+                    { text: "d) Designing mathematical models for data analysis", correct: false }
+                ]
+            },
+            {
+                question: "2. Which of the following is a characteristic of forecasts?",
+                answers: [
+                    { text: "a) Forecasts are always accurate", correct: false },
+                    { text: "b) Forecasts tend to be wrong", correct: true },
+                    { text: "c) Forecasts are not influenced by bias", correct: false },
+                    { text: "d) Forecasts are only used for short-term predictions", correct: false }
+                ]
+            },
+            {
+                question: "3. What type of forecast predicts the future demand for a company’s products or services?",
+                answers: [
+                    { text: "a) Economic forecast", correct: false },
+                    { text: "b) Technological forecast", correct: false },
+                    { text: "c) Demand forecast", correct: true },
+                    { text: "d) Financial forecast", correct: false }
+                ]
+            },
+            {
+                question: "4. Which of the following is true about short-term forecasts compared to long-term forecasts?",
+                answers: [
+                    { text: "a) Short-term forecasts are less accurate", correct: false },
+                    { text: "b) Short-term forecasts use the same methodologies as long-term forecasts", correct: false },
+                    { text: "c) Short-term forecasts tend to be more accurate", correct: true },
+                    { text: "d) Short-term forecasts are not used in business planning", correct: false }
+                ]
+            },
+            {
+                question: "5. Which department in an organization uses forecasts to anticipate hiring needs?",
+                answers: [
+                    { text: "a) Finance", correct: false },
+                    { text: "b) Human resources", correct: true },
+                    { text: "c) Production", correct: false },
+                    { text: "d) Marketing", correct: false }
+                ]
+            },
+            {
+                question: "6. What is the primary purpose of qualitative forecasting methods?",
+                answers: [
+                    { text: "a) To rely on mathematical computations", correct: false },
+                    { text: "b) To use judgments, opinions, and intuition for predictions", correct: true },
+                    { text: "c) To replace quantitative methods", correct: false },
+                    { text: "d) To analyze historical data using statistical models", correct: false }
+                ]
+            },
+            {
+                question: "7. What is the primary purpose of quantitative forecasting methods?",
+                answers: [
+                    { text: "a) To rely on subjective judgments and opinions", correct: false },
+                    { text: "b) To use mathematical models for predictions", correct: true },
+                    { text: "c) To replace qualitative methods", correct: false },
+                    { text: "d) To analyze historical data using intuition", correct: false }
+                ]
+            },
+            {
+                question: "8. What is a time series in the context of forecasting?",
+                answers: [
+                    { text: "a) A set of irregularly spaced numerical data", correct: false },
+                    { text: "b) A set of evenly spaced numerical data obtained by observing a response variable at regular time periods", correct: true },
+                    { text: "c) A method based on subjective judgments", correct: false },
+                    { text: "d) A type of economic forecast", correct: false }
+                ]
+            },
+            {
+                question: "9. Which of the following is NOT a pattern in time series data?",
+                answers: [
+                    { text: "a) Trend", correct: false },
+                    { text: "b) Seasonality", correct: false },
+                    { text: "c) Random variation", correct: false },
+                    { text: "d) Bias", correct: true }
+                ]
+            },
+            {
+                question: "10. What does the \"trend\" pattern in time series data represent?",
+                answers: [
+                    { text: "a) Regular, repeating fluctuations in the data", correct: false },
+                    { text: "b) Random variations in the data", correct: false },
+                    { text: "c) A long-term increase or decrease in the data", correct: true },
+                    { text: "d) A sudden spike or drop in the data", correct: false }
+                ]
+            },
+            {
+                question: "11. What does the \"seasonality\" pattern in time series data represent?",
+                answers: [
+                    { text: "a) Random variations in the data", correct: false },
+                    { text: "b) Regular, repeating fluctuations at fixed intervals", correct: true },
+                    { text: "c) A long-term increase or decrease in the data", correct: false },
+                    { text: "d) A sudden spike or drop in the data", correct: false }
+                ]
+            },
+            {
+                question: "12. What is random variation in time series data?",
+                answers: [
+                    { text: "a) A predictable pattern in the data", correct: false },
+                    { text: "b) Irregular, unpredictable fluctuations in the data", correct: true },
+                    { text: "c) A long-term trend in the data", correct: false },
+                    { text: "d) A seasonal pattern in the data", correct: false }
+                ]
+            },
+            {
+                question: "13. Which of the following is an example of an economic forecast?",
+                answers: [
+                    { text: "a) Predicting future demand for a product", correct: false },
+                    { text: "b) Predicting rates of technological progress", correct: false },
+                    { text: "c) Predicting inflation rates and interest rates", correct: true },
+                    { text: "d) Predicting worker absenteeism", correct: false }
+                ]
+            },
+            {
+                question: "14. Which of the following is an example of a technological forecast?",
+                answers: [
+                    { text: "a) Predicting future demand for a product", correct: false },
+                    { text: "b) Predicting rates of technological progress and innovation", correct: true },
+                    { text: "c) Predicting inflation rates and interest rates", correct: false },
+                    { text: "d) Predicting worker absenteeism", correct: false }
+                ]
+            },
+            {
+                question: "15. What is the primary purpose of forecasting in production?",
+                answers: [
+                    { text: "a) To project cash flows and capital requirements", correct: false },
+                    { text: "b) To plan production levels, workforce, and material requirements", correct: true },
+                    { text: "c) To anticipate hiring needs", correct: false },
+                    { text: "d) To analyze historical data", correct: false }
+                ]
+            },
+            {
+                question: "16. Which of the following is a limitation of forecasts?",
+                answers: [
+                    { text: "a) They are always accurate", correct: false },
+                    { text: "b) They can be biased", correct: true },
+                    { text: "c) They are only used for long-term predictions", correct: false },
+                    { text: "d) They do not rely on historical data", correct: false }
+                ]
+            },
+            {
+                question: "17. What is the primary purpose of forecasting in finance?",
+                answers: [
+                    { text: "a) To plan production levels", correct: false },
+                    { text: "b) To project cash flows and capital requirements", correct: true },
+                    { text: "c) To anticipate hiring needs", correct: false },
+                    { text: "d) To predict technological progress", correct: false }
+                ]
+            },
+            {
+                question: "18. What is the primary purpose of forecasting in human resources?",
+                answers: [
+                    { text: "a) To plan production levels", correct: false },
+                    { text: "b) To project cash flows and capital requirements", correct: false },
+                    { text: "c) To anticipate hiring needs", correct: true },
+                    { text: "d) To predict technological progress", correct: false }
+                ]
+            },
+            {
+                question: "19. What is the primary assumption of time series forecasting?",
+                answers: [
+                    { text: "a) Factors influencing the past and present will continue to influence the future", correct: true },
+                    { text: "b) Historical data is irrelevant for future predictions", correct: false },
+                    { text: "c) Random variation is the only pattern in the data", correct: false },
+                    { text: "d) Seasonality is not a factor in time series data", correct: false }
+                ]
+            },
+            {
+                question: "20. Which of the following is an example of a composite pattern in time series data?",
+                answers: [
+                    { text: "a) A combination of trend, seasonality, and random variation", correct: true },
+                    { text: "b) Only random variation", correct: false },
+                    { text: "c) Only seasonality", correct: false },
+                    { text: "d) Only trend", correct: false }
+                ]
+            },
+            // Set 2: Questions 21 - 40
+            {
+                question: "21. Which of the following is NOT a short-term forecasting method?",
+                answers: [
+                    { text: "a) Naïve", correct: false },
+                    { text: "b) Simple Moving Average", correct: false },
+                    { text: "c) Weighted Moving Average", correct: false },
+                    { text: "d) Linear Regression", correct: true }
+                ]
+            },
+            {
+                question: "22. What is the primary requirement for applying exponential smoothing?",
+                answers: [
+                    { text: "a) Historical data for all past periods", correct: false },
+                    { text: "b) The most recent actual demand and the most recent forecast", correct: true },
+                    { text: "c) A fixed trend in the data", correct: false },
+                    { text: "d) Seasonality in the data", correct: false }
+                ]
+            },
+            {
+                question: "23. What is an attractive feature of exponential smoothing?",
+                answers: [
+                    { text: "a) It ignores all historical data", correct: false },
+                    { text: "b) It includes a portion of every piece of historical demand", correct: true },
+                    { text: "c) It only works for data with strong seasonality", correct: false },
+                    { text: "d) It requires complex mathematical computations", correct: false }
+                ]
+            },
+            {
+                question: "24. When is exponential smoothing most appropriate?",
+                answers: [
+                    { text: "a) When the data has a strong trend", correct: false },
+                    { text: "b) When the data has cyclic variation", correct: false },
+                    { text: "c) When the data pattern is approximately horizontal", correct: true },
+                    { text: "d) When the data has pronounced seasonality", correct: false }
+                ]
+            },
+            {
+                question: "25. What is the formula for exponential smoothing?",
+                answers: [
+                    { text: "a) Ft = Ft−1 + α(At−1 − Ft−1)", correct: false },
+                    { text: "b) Ft = αAt−1 + (1−α)Ft−1", correct: false },
+                    { text: "c) Both a) and b)", correct: true },
+                    { text: "d) Ft = At−1", correct: false }
+                ]
+            },
+            {
+                question: "26. What is the range of the smoothing coefficient (α) in exponential smoothing?",
+                answers: [
+                    { text: "a) 0 to 1", correct: true },
+                    { text: "b) -1 to 1", correct: false },
+                    { text: "c) 0 to 10", correct: false },
+                    { text: "d) 1 to 100", correct: false }
+                ]
+            },
+            {
+                question: "27. What does a higher value of α (closer to 1) indicate in exponential smoothing?",
+                answers: [
+                    { text: "a) The forecast gives more weight to recent actual demand", correct: true },
+                    { text: "b) The forecast gives more weight to historical demand", correct: false },
+                    { text: "c) The forecast ignores recent actual demand", correct: false },
+                    { text: "d) The forecast becomes less responsive to changes", correct: false }
+                ]
+            },
+            {
+                question: "28. What does a lower value of α (closer to 0) indicate in exponential smoothing?",
+                answers: [
+                    { text: "a) The forecast gives more weight to recent actual demand", correct: false },
+                    { text: "b) The forecast gives more weight to historical demand", correct: true },
+                    { text: "c) The forecast ignores historical demand", correct: false },
+                    { text: "d) The forecast becomes more responsive to changes", correct: false }
+                ]
+            },
+            {
+                question: "29. What is the purpose of adaptive exponential smoothing?",
+                answers: [
+                    { text: "a) To keep the smoothing parameter (α) fixed", correct: false },
+                    { text: "b) To allow the smoothing parameter (α) to change over time to adapt to data patterns", correct: true },
+                    { text: "c) To ignore historical data", correct: false },
+                    { text: "d) To only work for data with strong seasonality", correct: false }
+                ]
+            },
+            {
+                question: "30. What is the primary advantage of adaptive exponential smoothing over traditional exponential smoothing?",
+                answers: [
+                    { text: "a) It uses a fixed value of α", correct: false },
+                    { text: "b) It incorporates the effect of changing data patterns into the model", correct: true },
+                    { text: "c) It ignores recent actual demand", correct: false },
+                    { text: "d) It only works for horizontal data patterns", correct: false }
+                ]
+            },
+            {
+                question: "31. Which of the following is true about the naïve forecasting method?",
+                answers: [
+                    { text: "a) It uses complex mathematical computations", correct: false },
+                    { text: "b) It assumes the next period’s forecast is equal to the last period’s actual demand", correct: true },
+                    { text: "c) It includes a portion of every piece of historical demand", correct: false },
+                    { text: "d) It is only used for long-term forecasting", correct: false }
+                ]
+            },
+            {
+                question: "32. What is the primary difference between simple moving average and weighted moving average?",
+                answers: [
+                    { text: "a) Simple moving average gives equal weight to all periods, while weighted moving average gives different weights", correct: true },
+                    { text: "b) Simple moving average uses exponential smoothing, while weighted moving average does not", correct: false },
+                    { text: "c) Simple moving average ignores historical data, while weighted moving average includes it", correct: false },
+                    { text: "d) Simple moving average is only used for long-term forecasting", correct: false }
+                ]
+            },
+            {
+                question: "33. What is the primary limitation of exponential smoothing?",
+                answers: [
+                    { text: "a) It cannot handle horizontal data patterns", correct: false },
+                    { text: "b) It does not work well for data with strong trends or seasonality", correct: true },
+                    { text: "c) It ignores historical data", correct: false },
+                    { text: "d) It requires complex mathematical computations", correct: false }
+                ]
+            },
+            {
+                question: "34. What is the primary purpose of the smoothing coefficient (α) in exponential smoothing?",
+                answers: [
+                    { text: "a) To determine the weight given to the most recent actual demand", correct: true },
+                    { text: "b) To ignore historical data", correct: false },
+                    { text: "c) To only work for data with strong seasonality", correct: false },
+                    { text: "d) To replace the need for forecasting", correct: false }
+                ]
+            },
+            {
+                question: "35. What happens if α = 1 in exponential smoothing?",
+                answers: [
+                    { text: "a) The forecast only considers historical data", correct: false },
+                    { text: "b) The forecast only considers the most recent actual demand", correct: true },
+                    { text: "c) The forecast becomes unresponsive to changes", correct: false },
+                    { text: "d) The forecast ignores recent actual demand", correct: false }
+                ]
+            },
+            {
+                question: "36. What happens if α = 0 in exponential smoothing?",
+                answers: [
+                    { text: "a) The forecast only considers historical data", correct: true },
+                    { text: "b) The forecast only considers the most recent actual demand", correct: false },
+                    { text: "c) The forecast becomes unresponsive to changes", correct: false },
+                    { text: "d) The forecast ignores historical data", correct: false }
+                ]
+            },
+            {
+                question: "37. What is the primary advantage of using exponential smoothing over the naïve method?",
+                answers: [
+                    { text: "a) It is simpler to compute", correct: false },
+                    { text: "b) It includes a portion of every piece of historical demand", correct: true },
+                    { text: "c) It ignores historical data", correct: false },
+                    { text: "d) It only works for data with strong trends", correct: false }
+                ]
+            },
+            {
+                question: "38. What is the primary disadvantage of the naïve forecasting method?",
+                answers: [
+                    { text: "a) It is too complex to compute", correct: false },
+                    { text: "b) It ignores all historical data except the most recent actual demand", correct: true },
+                    { text: "c) It only works for data with strong seasonality", correct: false },
+                    { text: "d) It requires a smoothing coefficient", correct: false }
+                ]
+            },
+            {
+                question: "39. What is the primary purpose of forecasting in production planning?",
+                answers: [
+                    { text: "a) To project cash flows and capital requirements", correct: false },
+                    { text: "b) To plan production levels, workforce, and material requirements", correct: true },
+                    { text: "c) To anticipate hiring needs", correct: false },
+                    { text: "d) To analyze historical data", correct: false }
+                ]
+            },
+            {
+                question: "40. What is the primary purpose of adaptive exponential smoothing?",
+                answers: [
+                    { text: "a) To keep the smoothing parameter (α) fixed", correct: false },
+                    { text: "b) To allow the smoothing parameter (α) to change over time to adapt to data patterns", correct: true },
+                    { text: "c) To ignore historical data", correct: false },
+                    { text: "d) To only work for data with strong seasonality", correct: false }
+                ]
+            },
+            // Set 3: Questions 41 - 55
+            {
+                question: "41. What is the primary purpose of applying the moving average technique twice in the double moving average method?",
+                answers: [
+                    { text: "a) To forecast data with strong seasonality", correct: false },
+                    { text: "b) To forecast data with a trend but no seasonality", correct: true },
+                    { text: "c) To ignore historical data", correct: false },
+                    { text: "d) To replace exponential smoothing", correct: false }
+                ]
+            },
+            {
+                question: "42. Which of the following is true about single exponential smoothing?",
+                answers: [
+                    { text: "a) It is suitable for data with a trend", correct: false },
+                    { text: "b) It is suitable for data with no trend or seasonality", correct: true },
+                    { text: "c) It is only used for long-term forecasting", correct: false },
+                    { text: "d) It ignores historical data", correct: false }
+                ]
+            },
+            {
+                question: "43. Which of the following is true about double exponential smoothing?",
+                answers: [
+                    { text: "a) It is suitable for data with no trend or seasonality", correct: false },
+                    { text: "b) It is suitable for data with a trend", correct: true },
+                    { text: "c) It is only used for short-term forecasting", correct: false },
+                    { text: "d) It ignores historical data", correct: false }
+                ]
+            },
+            {
+                question: "44. Which of the following is true about triple exponential smoothing?",
+                answers: [
+                    { text: "a) It is suitable for data with no trend or seasonality", correct: false },
+                    { text: "b) It is suitable for data with a trend and/or seasonality", correct: true },
+                    { text: "c) It is only used for short-term forecasting", correct: false },
+                    { text: "d) It ignores historical data", correct: false }
+                ]
+            },
+            {
+                question: "45. What is the formula for the level St in Holt’s linear trend method?",
+                answers: [
+                    { text: "a) St = αDt + (1−α)(St−1+Gt−1)", correct: true },
+                    { text: "b) St = β(St−St−1) + (1−β)Gt−1", correct: false },
+                    { text: "c) St = 2Mt − Mt′′", correct: false },
+                    { text: "d) St = (yt+yt−1+…+yt−n+1)/n", correct: false }
+                ]
+            },
+            {
+                question: "46. What is the formula for the trend Gt in Holt’s linear trend method?",
+                answers: [
+                    { text: "a) Gt = αDt + (1−α)(St−1+Gt−1)", correct: false },
+                    { text: "b) Gt = β(St−St−1) + (1−β)Gt−1", correct: true },
+                    { text: "c) Gt = 2Mt − Mt′′", correct: false },
+                    { text: "d) Gt = (yt+yt−1+…+yt−n+1)/n", correct: false }
+                ]
+            },
+            {
+                question: "47. What is the formula for the forecast Ft+1 in Holt’s linear trend method?",
+                answers: [
+                    { text: "a) Ft+1 = St + rGt", correct: true },
+                    { text: "b) Ft+1 = 2Mt − Mt′′", correct: false },
+                    { text: "c) Ft+1 = (2n−1(Mt − Mt′′))", correct: false },
+                    { text: "d) Ft+1 = αyt + (1−α)Mt−1", correct: false }
+                ]
+            },
+            {
+                question: "48. What is forecast error?",
+                answers: [
+                    { text: "a) The difference between the actual and the forecast for a given period", correct: true },
+                    { text: "b) The sum of the actual and the forecast for a given period", correct: false },
+                    { text: "c) The product of the actual and the forecast for a given period", correct: false },
+                    { text: "d) The ratio of the actual to the forecast for a given period", correct: false }
+                ]
+            },
+            {
+                question: "49. What is the formula for Mean Absolute Error (MAE)?",
+                answers: [
+                    { text: "a) MAE = 1/n ∑|yi − xi|", correct: true },
+                    { text: "b) MAE = 1/n ∑(yi − xi)²", correct: false },
+                    { text: "c) MAE = 1/n ∑(yi − xi)²", correct: false },
+                    { text: "d) MAE = 1/n ∑(|yi − xi|/|yi|×100)", correct: false }
+                ]
+            },
+            {
+                question: "50. What is the formula for Mean Absolute Percentage Error (MAPE)?",
+                answers: [
+                    { text: "a) MAPE = 1/n ∑|yi − xi|", correct: false },
+                    { text: "b) MAPE = 1/n ∑(yi − xi)²", correct: false },
+                    { text: "c) MAPE = 1/n ∑(yi − xi)²", correct: false },
+                    { text: "d) MAPE = 1/n ∑(|yi − xi|/|yi|×100)", correct: true }
+                ]
+            },
+            {
+                question: "51. What is the formula for Mean Squared Error (MSE)?",
+                answers: [
+                    { text: "a) MSE = 1/n ∑|yi − xi|", correct: false },
+                    { text: "b) MSE = 1/n ∑(yi − xi)²", correct: true },
+                    { text: "c) MSE = 1/n ∑(yi − xi)²", correct: false },
+                    { text: "d) MSE = 1/n ∑(|yi − xi|/|yi|×100)", correct: false }
+                ]
+            },
+            {
+                question: "52. What is the formula for Root Mean Squared Error (RMSE)?",
+                answers: [
+                    { text: "a) RMSE = 1/n ∑|yi − xi|", correct: false },
+                    { text: "b) RMSE = 1/n ∑(yi − xi)²", correct: false },
+                    { text: "c) RMSE = √(1/n ∑(yi − xi)²)", correct: true },
+                    { text: "d) RMSE = 1/n ∑(|yi − xi|/|yi|×100)", correct: false }
+                ]
+            },
+            {
+                question: "53. What does a low value for Mean Absolute Deviation (MAD) indicate?",
+                answers: [
+                    { text: "a) The data values are concentrated closely together", correct: true },
+                    { text: "b) The data values are more spread out", correct: false },
+                    { text: "c) The forecast model is inaccurate", correct: false },
+                    { text: "d) The forecast model is biased", correct: false }
+                ]
+            },
+            {
+                question: "54. What does a high value for Mean Absolute Deviation (MAD) indicate?",
+                answers: [
+                    { text: "a) The data values are concentrated closely together", correct: false },
+                    { text: "b) The data values are more spread out", correct: true },
+                    { text: "c) The forecast model is accurate", correct: false },
+                    { text: "d) The forecast model is unbiased", correct: false }
+                ]
+            },
+            {
+                question: "55. What is the primary purpose of the tracking signal in forecasting?",
+                answers: [
+                    { text: "a) To measure the dispersion of data values", correct: false },
+                    { text: "b) To control forecast accuracy by comparing new data with forecasts", correct: true },
+                    { text: "c) To replace the need for forecasting", correct: false },
+                    { text: "d) To ignore historical data", correct: false }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        const questionText = document.getElementById("question-text");
+        const answersContainer = document.getElementById("answers");
+        const nextButton = document.getElementById("next-button");
+        const correctSound = document.getElementById("correct-sound");
+        const incorrectSound = document.getElementById("incorrect-sound");
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            questionText.textContent = currentQuestion.question;
+            answersContainer.innerHTML = "";
+            nextButton.disabled = true;
+            
+            currentQuestion.answers.forEach((answer) => {
+                const button = document.createElement("button");
+                button.textContent = answer.text;
+                button.classList.add("answer-button");
+                button.dataset.correct = answer.correct;
+                button.addEventListener("click", selectAnswer);
+                answersContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(event) {
+            const selectedButton = event.target;
+            const isCorrect = selectedButton.dataset.correct === "true";
+            if (isCorrect) {
+                selectedButton.classList.add("correct");
+                correctSound.play();
+                score++;
+            } else {
+                selectedButton.classList.add("incorrect");
+                incorrectSound.play();
+            }
+            Array.from(answersContainer.children).forEach((button) => {
+                button.disabled = true;
+            });
+            nextButton.disabled = false;
+        }
+
+        nextButton.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showScore();
+            }
+        });
+
+        function showScore() {
+            questionText.textContent = "Quiz Completed!";
+            answersContainer.innerHTML = `<p style="font-size:45px;">Your Score: ${score} / ${quizData.length}</p>`;
+            nextButton.style.display = "none";
+            
+            const repeatButton = document.createElement("button");
+            repeatButton.textContent = "Repeat Quiz";
+            repeatButton.classList.add("repeat-button");
+            repeatButton.addEventListener("click", () => {
+                currentQuestionIndex = 0;
+                score = 0;
+                nextButton.style.display = "block";
+                loadQuestion();
+            });
+            answersContainer.appendChild(repeatButton);
+            
+            const backButton = document.createElement("button");
+            backButton.textContent = "Back to Menu";
+            backButton.classList.add("back-button");
+            backButton.addEventListener("click", () => {
+                window.location.href = "mainpage.html";
+            });
+            answersContainer.appendChild(backButton);
+        }
+
+        loadQuestion();
+
+        const toggleImg = document.getElementById("toggleImg");
+        const body = document.body;
+        toggleImg.addEventListener("click", () => {
+            body.classList.toggle("light-mode");
+            toggleImg.src = body.classList.contains("light-mode") ? "night-mode.png" : "brightness.png";
+        });
+    </script>
+</body>
+</html>
