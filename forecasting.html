@@ -692,150 +692,152 @@
         ];
 
         
-    let currentQuestionIndex = 0;
-    let score = 0;
-    const questionText = document.getElementById("question-text");
-    const answersContainer = document.getElementById("answers");
-    const nextButton = document.getElementById("next-button");
-    const correctSound = document.getElementById("correct-sound");
-    const incorrectSound = document.getElementById("incorrect-sound");
+        let currentQuestionIndex = 0;
+let score = 0;
+const questionText = document.getElementById("question-text");
+const answersContainer = document.getElementById("answers");
+const nextButton = document.getElementById("next-button");
+const correctSound = document.getElementById("correct-sound");
+const incorrectSound = document.getElementById("incorrect-sound");
 
-    function loadQuestion() {
-        const currentQuestion = quizData[currentQuestionIndex];
-        questionText.textContent = currentQuestion.question;
-        answersContainer.innerHTML = "";
-        nextButton.disabled = true;
-        
-        currentQuestion.answers.forEach((answer) => {
-            const button = document.createElement("button");
-            button.textContent = answer.text;
-            button.classList.add("answer-button");
-            button.dataset.correct = answer.correct;
-            button.addEventListener("click", selectAnswer);
-            answersContainer.appendChild(button);
-        });
-    }
-
-    function selectAnswer(event) {
-        const selectedButton = event.target;
-        const isCorrect = selectedButton.dataset.correct === "true";
-        if (isCorrect) {
-            selectedButton.classList.add("correct");
-            correctSound.play();
-            score++;
-        } else {
-            selectedButton.classList.add("incorrect");
-            incorrectSound.play();
-        }
-        Array.from(answersContainer.children).forEach((button) => {
-            button.disabled = true;
-        });
-        nextButton.disabled = false;
-    }
-
-    // Modified nextButton event listener: pause at question 25 if more than 25 questions exist
-    nextButton.addEventListener("click", () => {
-        currentQuestionIndex++;
-        if (currentQuestionIndex === 25 && quizData.length > 25) {
-            askContinue();
-        } else if (currentQuestionIndex < quizData.length) {
-            loadQuestion();
-        } else {
-            showScore();
-        }
+function loadQuestion() {
+    const currentQuestion = quizData[currentQuestionIndex];
+    questionText.textContent = currentQuestion.question;
+    answersContainer.innerHTML = "";
+    nextButton.disabled = true;
+    
+    currentQuestion.answers.forEach((answer) => {
+        const button = document.createElement("button");
+        button.textContent = answer.text;
+        button.classList.add("answer-button");
+        button.dataset.correct = answer.correct;
+        button.addEventListener("click", selectAnswer);
+        answersContainer.appendChild(button);
     });
+}
 
-    // askContinue function: displays "Continue Quiz" and "End Quiz" buttons centered
-    function askContinue() {
-        // Hide nextButton and clear current answers
-        nextButton.style.display = "none";
-        answersContainer.innerHTML = "";
-        
-        // Create container for the prompt buttons with centered alignment
-        const promptDiv = document.createElement("div");
-        promptDiv.style.display = "flex";
-        promptDiv.style.justifyContent = "center";
-        promptDiv.style.alignItems = "center";
-        promptDiv.style.gap = "20px";
-        promptDiv.style.margin = "30px auto";
-        promptDiv.style.width = "855px"; // same width as your other elements
-        
-        // Continue Quiz button (inherits styling from next-button)
-        const continueButton = document.createElement("button");
-        continueButton.textContent = "Continue Quiz";
-        continueButton.classList.add("next-button");
-        continueButton.style.width = "600px";
-        continueButton.addEventListener("click", () => {
-            promptDiv.remove();
-            nextButton.style.display = "block";
-            loadQuestion();
-        });
-        
-        // End Quiz button (inherits styling from back-button)
-        const endButton = document.createElement("button");
-        endButton.textContent = "End Quiz";
-        endButton.classList.add("back-button");
-        endButton.style.width = "600px";
-        endButton.addEventListener("click", () => {
-            promptDiv.remove();
-            showScore();
-        });
-        
-        promptDiv.appendChild(continueButton);
-        promptDiv.appendChild(endButton);
-        answersContainer.appendChild(promptDiv);
+function selectAnswer(event) {
+    const selectedButton = event.target;
+    const isCorrect = selectedButton.dataset.correct === "true";
+    if (isCorrect) {
+        selectedButton.classList.add("correct");
+        correctSound.play();
+        score++;
+    } else {
+        selectedButton.classList.add("incorrect");
+        incorrectSound.play();
     }
-
-    function showScore() {
-        questionText.textContent = "Quiz Completed!";
-        answersContainer.innerHTML = `<p style="font-size:45px; text-align:center;">Your Score: ${score} / ${quizData.length}</p>`;
-        nextButton.style.display = "none";
-
-        // Create a container for the final buttons and center them
-        const finalDiv = document.createElement("div");
-        finalDiv.style.display = "flex";
-        finalDiv.style.flexDirection = "column"; // stack buttons vertically
-        finalDiv.style.alignItems = "center";
-        finalDiv.style.justifyContent = "center";
-        finalDiv.style.gap = "20px";
-        finalDiv.style.margin = "30px auto";
-        finalDiv.style.width = "855px"; // same width as your other elements
-
-        // Repeat Quiz button (green)
-        const repeatButton = document.createElement("button");
-        repeatButton.textContent = "Repeat Quiz";
-        repeatButton.classList.add("repeat-button");
-        repeatButton.style.width = "600px";
-        repeatButton.addEventListener("click", () => {
-            currentQuestionIndex = 0;
-            score = 0;
-            nextButton.style.display = "block";
-            loadQuestion();
-        });
-        finalDiv.appendChild(repeatButton);
-
-        // Back to Menu button (wheat color)
-        const backButton = document.createElement("button");
-        backButton.textContent = "Back to Menu";
-        backButton.classList.add("back-button");
-        backButton.style.width = "600px";
-        backButton.addEventListener("click", () => {
-            window.location.href = "mainpage.html";
-        });
-        finalDiv.appendChild(backButton);
-
-        answersContainer.appendChild(finalDiv);
-    }
-
-    loadQuestion();
-
-    const toggleImg = document.getElementById("toggleImg");
-    const body = document.body;
-    toggleImg.addEventListener("click", () => {
-        body.classList.toggle("light-mode");
-        toggleImg.src = body.classList.contains("light-mode") ? "night-mode.png" : "brightness.png";
+    Array.from(answersContainer.children).forEach((button) => {
+        button.disabled = true;
     });
+    nextButton.disabled = false;
+}
 
+// Modified nextButton listener: pause at question 25 if more than 25 questions exist
+nextButton.addEventListener("click", () => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex === 25 && quizData.length > 25) {
+        askContinue();
+    } else if (currentQuestionIndex < quizData.length) {
+        loadQuestion();
+    } else {
+        showScore(); // This will display score out of quizData.length (55)
+    }
+});
+
+// askContinue: displays "Continue Quiz" and "End Quiz" buttons centered
+function askContinue() {
+    // Hide nextButton and clear answers
+    nextButton.style.display = "none";
+    answersContainer.innerHTML = "";
+    
+    // Container for prompt buttons
+    const promptDiv = document.createElement("div");
+    promptDiv.style.display = "flex";
+    promptDiv.style.justifyContent = "center";
+    promptDiv.style.alignItems = "center";
+    promptDiv.style.gap = "20px";
+    promptDiv.style.margin = "30px auto";
+    promptDiv.style.width = "855px"; // Same width as your other elements
+    
+    // Continue Quiz button (inherits styling from next-button)
+    const continueButton = document.createElement("button");
+    continueButton.textContent = "Continue Quiz";
+    continueButton.classList.add("next-button");
+    continueButton.style.width = "600px";
+    continueButton.addEventListener("click", () => {
+        promptDiv.remove();
+        nextButton.style.display = "block";
+        loadQuestion();
+    });
+    
+    // End Quiz button (inherits styling from back-button)
+    const endButton = document.createElement("button");
+    endButton.textContent = "End Quiz";
+    endButton.classList.add("back-button");
+    endButton.style.width = "600px";
+    endButton.addEventListener("click", () => {
+        promptDiv.remove();
+        showScore(25); // Display score out of 25 if user ends here
+    });
+    
+    promptDiv.appendChild(continueButton);
+    promptDiv.appendChild(endButton);
+    answersContainer.appendChild(promptDiv);
+}
+
+// showScore now accepts an optional parameter (finalCount)
+// If finalCount is provided, the score is displayed over that number.
+// Otherwise, it defaults to quizData.length.
+function showScore(finalCount = quizData.length) {
+    questionText.textContent = "Quiz Completed!";
+    answersContainer.innerHTML = `<p style="font-size:45px; text-align:center;">Your Score: ${score} / ${finalCount}</p>`;
+    nextButton.style.display = "none";
+
+    // Container for final buttons
+    const finalDiv = document.createElement("div");
+    finalDiv.style.display = "flex";
+    finalDiv.style.flexDirection = "column"; // stack buttons vertically
+    finalDiv.style.alignItems = "center";
+    finalDiv.style.justifyContent = "center";
+    finalDiv.style.gap = "20px";
+    finalDiv.style.margin = "30px auto";
+    finalDiv.style.width = "855px"; // Same width as your other elements
+
+    // Repeat Quiz button (green)
+    const repeatButton = document.createElement("button");
+    repeatButton.textContent = "Repeat Quiz";
+    repeatButton.classList.add("repeat-button");
+    repeatButton.style.width = "600px";
+    repeatButton.addEventListener("click", () => {
+        currentQuestionIndex = 0;
+        score = 0;
+        nextButton.style.display = "block";
+        loadQuestion();
+    });
+    finalDiv.appendChild(repeatButton);
+
+    // Back to Menu button (wheat color)
+    const backButton = document.createElement("button");
+    backButton.textContent = "Back to Menu";
+    backButton.classList.add("back-button");
+    backButton.style.width = "600px";
+    backButton.addEventListener("click", () => {
+        window.location.href = "mainpage.html";
+    });
+    finalDiv.appendChild(backButton);
+
+    answersContainer.appendChild(finalDiv);
+}
+
+loadQuestion();
+
+const toggleImg = document.getElementById("toggleImg");
+const body = document.body;
+toggleImg.addEventListener("click", () => {
+    body.classList.toggle("light-mode");
+    toggleImg.src = body.classList.contains("light-mode") ? "night-mode.png" : "brightness.png";
+});
 
     </script>
 </body>
