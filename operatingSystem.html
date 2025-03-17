@@ -152,6 +152,7 @@
         }
         .repeat-button {
             background-color: green;
+            width: 600px;
         }
         .repeat-button:hover {
             background-color: rgba(255, 255, 255, 0.2);
@@ -160,6 +161,7 @@
             background-color: wheat;
             color: #1a1a1a;
             margin-top: 15px;
+            width: 600px;
         }
         .back-button:hover {
             background-color: rgba(255, 255, 255, 0.7);
@@ -695,94 +697,146 @@
             }
         ];
 
-        let currentQuestionIndex = 0;
-        let score = 0;
-        const questionText = document.getElementById("question-text");
-        const answersContainer = document.getElementById("answers");
-        const nextButton = document.getElementById("next-button");
-        const correctSound = document.getElementById("correct-sound");
-        const incorrectSound = document.getElementById("incorrect-sound");
+    
+    let currentQuestionIndex = 0;
+    let score = 0;
+    const questionText = document.getElementById("question-text");
+    const answersContainer = document.getElementById("answers");
+    const nextButton = document.getElementById("next-button");
+    const correctSound = document.getElementById("correct-sound");
+    const incorrectSound = document.getElementById("incorrect-sound");
 
-        function loadQuestion() {
-            const currentQuestion = quizData[currentQuestionIndex];
-            questionText.textContent = currentQuestion.question;
-            answersContainer.innerHTML = "";
-            nextButton.disabled = true;
+    function loadQuestion() {
+        const currentQuestion = quizData[currentQuestionIndex];
+        questionText.textContent = currentQuestion.question;
+        answersContainer.innerHTML = "";
+        nextButton.disabled = true;
 
-            currentQuestion.answers.forEach((answer) => {
-                const button = document.createElement("button");
-                button.textContent = answer.text;
-                button.classList.add("answer-button");
-                button.dataset.correct = answer.correct;
-                button.addEventListener("click", selectAnswer);
-                answersContainer.appendChild(button);
-            });
+        currentQuestion.answers.forEach((answer) => {
+            const button = document.createElement("button");
+            button.textContent = answer.text;
+            button.classList.add("answer-button");
+            button.dataset.correct = answer.correct;
+            button.addEventListener("click", selectAnswer);
+            answersContainer.appendChild(button);
+        });
+    }
+
+    function selectAnswer(event) {
+        const selectedButton = event.target;
+        const isCorrect = selectedButton.dataset.correct === "true";
+
+        if (isCorrect) {
+            selectedButton.classList.add("correct");
+            correctSound.play();
+            score++;
+        } else {
+            selectedButton.classList.add("incorrect");
+            incorrectSound.play();
         }
 
-        function selectAnswer(event) {
-            const selectedButton = event.target;
-            const isCorrect = selectedButton.dataset.correct === "true";
-
-            if (isCorrect) {
-                selectedButton.classList.add("correct");
-                correctSound.play();
-                score++;
-            } else {
-                selectedButton.classList.add("incorrect");
-                incorrectSound.play();
-            }
-
-            Array.from(answersContainer.children).forEach((button) => {
-                button.disabled = true;
-            });
-
-            nextButton.disabled = false;
-        }
-
-        nextButton.addEventListener("click", () => {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < quizData.length) {
-                loadQuestion();
-            } else {
-                showScore();
-            }
+        Array.from(answersContainer.children).forEach((button) => {
+            button.disabled = true;
         });
 
-        function showScore() {
-            questionText.textContent = "Quiz Completed!";
-            answersContainer.innerHTML = `<p style="font-size:45px;">Your Score: ${score} / ${quizData.length}</p>`;
-            nextButton.style.display = "none";
-
-            // Repeat Quiz button (green)
-            const repeatButton = document.createElement("button");
-            repeatButton.textContent = "Repeat Quiz";
-            repeatButton.classList.add("repeat-button");
-            repeatButton.addEventListener("click", () => {
-                currentQuestionIndex = 0;
-                score = 0;
-                nextButton.style.display = "block";
-                loadQuestion();
-            });
-            answersContainer.appendChild(repeatButton);
-
-            // Back to Menu button (wheat color)
-            const backButton = document.createElement("button");
-            backButton.textContent = "Back to Menu";
-            backButton.classList.add("back-button");
-            backButton.addEventListener("click", () => {
-                window.location.href = "mainpage.html";
-            });
-            answersContainer.appendChild(backButton);
+        nextButton.disabled = false;
+    }
+    
+    // Modified nextButton listener: pause after 25 questions if more exist
+    nextButton.addEventListener("click", () => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex === 25 && quizData.length > 25) {
+            askContinue();
+        } else if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showScore();
         }
+    });
 
+    // Function to ask user to continue or end the quiz after question 25
+    function askContinue() {
+        // Hide nextButton and clear current answers
+        nextButton.style.display = "none";
+        answersContainer.innerHTML = "";
+
+        // Create a container for the prompt buttons
+        const promptDiv = document.createElement("div");
+        promptDiv.style.display = "flex";
+        promptDiv.style.justifyContent = "center";
+        promptDiv.style.alignItems = "center";
+        promptDiv.style.gap = "20px";
+        promptDiv.style.margin = "30px auto";
+        promptDiv.style.width = "855px"; // same width as your other elements
+        promptDiv.style.marginLeft = "-50px"; 
+
+        // Continue Quiz button (inherits visual properties of next-button)
+        const continueButton = document.createElement("button");
+        continueButton.textContent = "Continue Quiz";
+        continueButton.classList.add("next-button");
+        continueButton.style.width = "600px";
+        continueButton.addEventListener("click", () => {
+            promptDiv.remove();
+            nextButton.style.display = "block";
+            loadQuestion();
+        });
+
+        // End Quiz button (inherits visual properties of back-button)
+        const endButton = document.createElement("button");
+        endButton.textContent = "End Quiz";
+        endButton.classList.add("back-button");
+        endButton.style.width = "600px";
+        endButton.addEventListener("click", () => {
+            promptDiv.remove();
+            showScore();
+        });
+
+        promptDiv.appendChild(continueButton);
+        promptDiv.appendChild(endButton);
+        answersContainer.appendChild(promptDiv);
+    }
+
+    function showScore() {
+    questionText.textContent = "Quiz Completed!";
+    answersContainer.innerHTML = `<p style="font-size:45px; text-align:center;">Your Score: ${score} / ${quizData.length}</p>`;
+    nextButton.style.display = "none";
+
+    // Repeat Quiz button (green)
+    const repeatButton = document.createElement("button");
+    repeatButton.textContent = "Repeat Quiz";
+    repeatButton.classList.add("repeat-button");
+    // Add marginLeft so you can adjust alignment
+    repeatButton.style.marginLeft = "120px"; // adjust this value as needed
+    repeatButton.addEventListener("click", () => {
+        currentQuestionIndex = 0;
+        score = 0;
+        nextButton.style.display = "block";
         loadQuestion();
+    });
+    answersContainer.appendChild(repeatButton);
 
-        const toggleImg = document.getElementById("toggleImg");
-        const body = document.body;
-        toggleImg.addEventListener("click", () => {
-            body.classList.toggle("light-mode");
-            toggleImg.src = body.classList.contains("light-mode") ? "night-mode.png" : "brightness.png";
-        });
+    // Back to Menu button (wheat color)
+    const backButton = document.createElement("button");
+    backButton.textContent = "Back to Menu";
+    backButton.classList.add("back-button");
+    // Add marginLeft for alignment
+    backButton.style.marginLeft = "120px"; // adjust this value as needed
+    backButton.addEventListener("click", () => {
+        window.location.href = "mainpage.html";
+    });
+    answersContainer.appendChild(backButton);
+}
+
+
+    loadQuestion();
+
+    const toggleImg = document.getElementById("toggleImg");
+    const body = document.body;
+    toggleImg.addEventListener("click", () => {
+        body.classList.toggle("light-mode");
+        toggleImg.src = body.classList.contains("light-mode") ? "night-mode.png" : "brightness.png";
+    });
+
     </script>
 </body>
 </html>
