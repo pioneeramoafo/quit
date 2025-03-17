@@ -59,65 +59,22 @@
                 50%      { transform: scale(var(--_s,1)) translate(-25%) rotate(1turn); }
                 75%,100% { transform: scale(var(--_s,1)) translate(0) rotate(1turn); }
             }
-            /* New styles for the name entry form */
-            .name-form {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                margin-bottom: 20px;
-            }
-            .name-form input {
-                padding: 10px;
-                font-size: 16px;
-                margin-bottom: 10px;
-            }
-            .name-form button {
-                padding: 10px 20px;
-                font-size: 16px;
-                cursor: pointer;
-            }
         </style>
     </head>
     <body>
-        <!-- Name entry form (only shows if the name is not saved) -->
-        <div id="nameEntry" class="name-form" style="display:none;">
-            <label for="username">Enter your name:</label>
-            <input type="text" id="username" placeholder="Your Name">
-            <button id="saveName">Save Name</button>
-        </div>
-
         <h1 class="heading">Question Bank</h1>
         <p class="ex-text">
-            This is your ultimate study companion, designed to help students access past questions and answers effortlessly.
-            With a user-friendly interface, it provides a comprehensive collection of exam materials to boost your preparation and confidence.
+            This is your ultimate study companion, designed to help students access past questions and answers effortlessly. With a user-friendly interface, it provides a comprehensive collection of exam materials to boost your preparation and confidence.
         </p>
         <div class="loader" id="loader"></div>
 
         <script>
-            // Check if the user name is already saved
-            if (!localStorage.getItem("userName")) {
-                document.getElementById("nameEntry").style.display = "flex";
-            } else {
-                // Optionally, you can use the stored name in your page; for now we'll just log it
-                console.log("Welcome back, " + localStorage.getItem("userName") + "!");
-            }
-
-            // Save the user name and hide the form
-            document.getElementById("saveName").addEventListener("click", function() {
-                const name = document.getElementById("username").value.trim();
-                if (name) {
-                    localStorage.setItem("userName", name);
-                    document.getElementById("nameEntry").style.display = "none";
-                    console.log("Welcome, " + name + "!");
-                }
-            });
-
             // Show the loader after 3 seconds
             setTimeout(() => {
                 document.getElementById("loader").style.opacity = "1";
             }, 3000);
 
-            // Redirect to another HTML file after 18 seconds (or adjust timing as needed)
+            // Redirect to another HTML file after 6 seconds
             setTimeout(() => {
                 window.location.href = "another-page.html"; // Replace with your desired file name
             }, 18000);
