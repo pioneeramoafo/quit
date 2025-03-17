@@ -178,6 +178,7 @@
         .repeat-button {
             background-color: green;
             width: 600px;
+           
         }
 
         .repeat-button:hover {
@@ -188,6 +189,7 @@
             background-color: wheat;
             color: #1a1a1a;
             margin-top: 15px;
+           
             width: 600px;
         }
 
@@ -225,510 +227,578 @@
 
     <!-- JavaScript -->
     <script>
-        const quizData = [
-            {
-                question: "1. What is the correct syntax for declaring a variable in Java?",
-                answers: [
-                    { text: "A. int x = 10;", correct: true },
-                    { text: "B. var x = 10;", correct: false },
-                    { text: "C. x = 10;", correct: false },
-                    { text: "D. int x;", correct: false },
-                ],
-            },
-            {
-                question: "2. Which keyword is used to define a class in Java?",
-                answers: [
-                    { text: "A. interface", correct: false },
-                    { text: "B. class", correct: true },
-                    { text: "C. struct", correct: false },
-                    { text: "D. object", correct: false },
-                ],
-            },
-            {
-                question: "3. What is the default value of an uninitialized integer variable in Java?",
-                answers: [
-                    { text: "A. null", correct: false },
-                    { text: "B. 1", correct: false },
-                    { text: "C. 0", correct: true },
-                    { text: "D. undefined", correct: false },
-                ],
-            },
-            {
-                question: "4. Which of the following is NOT a primitive data type in Java?",
-                answers: [
-                    { text: "A. int", correct: false },
-                    { text: "B. float", correct: false },
-                    { text: "C. String", correct: true },
-                    { text: "D. boolean", correct: false },
-                ],
-            },
-            {
-                question: "5. What is the output of `System.out.println(5 + \"5\");` in Java?",
-                answers: [
-                    { text: "A. 10", correct: false },
-                    { text: "B. 55", correct: true },
-                    { text: "C. \"55\"", correct: false },
-                    { text: "D. Error", correct: false },
-                ],
-            },
-            // New Questions (Set 1)
-            {
-                question: "6. Which of the following best describes one of Java’s key advantages regarding simplicity?",
-                answers: [
-                    { text: "A. Java’s syntax is entirely different from C++ to avoid confusion.", correct: false },
-                    { text: "B. Java is easy to write, more readable, and most concepts are drawn from C++ for simplicity.", correct: true },
-                    { text: "C. Java programs always require fewer lines of code than other languages.", correct: false },
-                    { text: "D. Java uses assembly language for optimal performance.", correct: false },
-                ],
-            },
-            {
-                question: "7. What makes Java a secure programming language?",
-                answers: [
-                    { text: "A. Java programs are compiled directly to machine code, making them secure.", correct: false },
-                    { text: "B. Java programs are not allowed to use any user input.", correct: false },
-                    { text: "C. Java provides a secure means of creating Internet and web applications, preventing harm to other systems.", correct: true },
-                    { text: "D. Java programs run without any runtime checks, making them secure by default.", correct: false },
-                ],
-            },
-            {
-                question: "8. Which statement correctly describes the portability of Java?",
-                answers: [
-                    { text: "A. Java programs only run on Windows and Mac.", correct: false },
-                    { text: "B. Java programs can execute on any platform that has a Java Virtual Machine (JVM).", correct: true },
-                    { text: "C. Java is portable only if the code is rewritten for each platform.", correct: false },
-                    { text: "D. Java programs can only be transferred via physical media.", correct: false },
-                ],
-            },
-            {
-                question: "9. In terms of object orientation, what is a key difference between Java and C++?",
-                answers: [
-                    { text: "A. Java does not support object-oriented programming at all.", correct: false },
-                    { text: "B. Java is a purely object-oriented language, while C++ is only partially object-oriented.", correct: true },
-                    { text: "C. C++ is more object-oriented than Java because it supports classes.", correct: false },
-                    { text: "D. Both Java and C++ are purely procedural languages.", correct: false },
-                ],
-            },
-            {
-                question: "10. What does the term “multithreaded” in Java imply?",
-                answers: [
-                    { text: "A. Java only supports a single thread of execution at a time.", correct: false },
-                    { text: "B. Java supports running multiple threads concurrently, which is built into the language.", correct: true },
-                    { text: "C. Java requires external libraries to manage threads.", correct: false },
-                    { text: "D. Java threads can only run on Linux systems.", correct: false },
-                ],
-            },
-            {
-                question: "11. Which Java edition is primarily used for developing desktop applications?",
-                answers: [
-                    { text: "A. Java ME", correct: false },
-                    { text: "B. Java EE", correct: false },
-                    { text: "C. Java SE", correct: true },
-                    { text: "D. Java BE", correct: false },
-                ],
-            },
-            {
-                question: "12. What are the two main elements that each Java edition consists of?",
-                answers: [
-                    { text: "A. JVM and bytecode", correct: false },
-                    { text: "B. JDK and applets", correct: false },
-                    { text: "C. JRE and JDK", correct: true },
-                    { text: "D. JDK and IDE", correct: false },
-                ],
-            },
-            {
-                question: "13. What is the main difference between a compiler and an interpreter in Java?",
-                answers: [
-                    { text: "A. A Java program is only interpreted and never compiled.", correct: false },
-                    { text: "B. Compilation happens every time the program is executed.", correct: false },
-                    { text: "C. A Java program is both compiled (once) and interpreted (each execution).", correct: true },
-                    { text: "D. Java uses a compiler for desktop apps and an interpreter for web apps.", correct: false },
-                ],
-            },
-            {
-                question: "14. Which of the following is true about Java comments?",
-                answers: [
-                    { text: "A. They are executed as part of the program.", correct: false },
-                    { text: "B. They improve code readability and are ignored during execution.", correct: true },
-                    { text: "C. Only single-line comments are allowed in Java.", correct: false },
-                    { text: "D. Comments can only be placed at the beginning of a Java file.", correct: false },
-                ],
-            },
-            {
-                question: "15. Which of these is a valid Java identifier for a variable name?",
-                answers: [
-                    { text: "A. 7button", correct: false },
-                    { text: "B. Welcome1", correct: true },
-                    { text: "C. my variable", correct: false },
-                    { text: "D. public", correct: false },
-                ],
-            },
-            // New Questions (Set 2: Data Types & Operators)
-            {
-                question: "16. What is the primary purpose of a data type in programming?",
-                answers: [
-                    { text: "A. To increase the speed of execution.", correct: false },
-                    { text: "B. To tell the compiler or interpreter how the programmer intends to use the data.", correct: true },
-                    { text: "C. To provide a user interface for input.", correct: false },
-                    { text: "D. To automatically generate documentation.", correct: false },
-                ],
-            },
-            {
-                question: "17. Which of the following statements about Java being a strongly typed language is correct?",
-                answers: [
-                    { text: "A. Java allows any operation without checking data types.", correct: false },
-                    { text: "B. All variables, expressions, and values in Java have a type, and illegal operations will not compile.", correct: true },
-                    { text: "C. Java only checks data types at runtime.", correct: false },
-                    { text: "D. Java automatically converts data types during arithmetic operations without any error.", correct: false },
-                ],
-            },
-            {
-                question: "18. Which of the following best describes the two general categories of built-in data types in Java?",
-                answers: [
-                    { text: "A. Numeric and non-numeric.", correct: false },
-                    { text: "B. Primitive (non object oriented) and object oriented.", correct: true },
-                    { text: "C. Local and global.", correct: false },
-                    { text: "D. Static and dynamic.", correct: false },
-                ],
-            },
-            {
-                question: "19. What are the three general classes of operators in Java?",
-                answers: [
-                    { text: "A. Arithmetic, relational, and logical.", correct: true },
-                    { text: "B. Bitwise, memory, and stack.", correct: false },
-                    { text: "C. Unary, binary, and ternary.", correct: false },
-                    { text: "D. Assignment, loop, and condition.", correct: false },
-                ],
-            },
-            {
-                question: "20. In Java, what is the result of the expression 7 / 5 when performed as integer division?",
-                answers: [
-                    { text: "A. 1.4", correct: false },
-                    { text: "B. 2", correct: false },
-                    { text: "C. 1", correct: true },
-                    { text: "D. 0", correct: false },
-                ],
-            },
-            {
-                question: "21. What does the modulus operator (%) return in Java? For example, what is 7 % 5?",
-                answers: [
-                    { text: "A. 5", correct: false },
-                    { text: "B. 2", correct: true },
-                    { text: "C. 1", correct: false },
-                    { text: "D. 7", correct: false },
-                ],
-            },
-            // New Questions (Set 3: Packages, Input, and Strings)
-            {
-                question: "22. What is a Java package?",
-                answers: [
-                    { text: "A. A collection of files containing precompiled routines (classes) that a program can use.", correct: true },
-                    { text: "B. A single file containing the source code for an application.", correct: false },
-                    { text: "C. A runtime environment for executing Java programs.", correct: false },
-                    { text: "D. A tool for compiling Java source code.", correct: false },
-                ],
-            },
-            {
-                question: "23. To use a predefined class in a Java application, you must first:",
-                answers: [
-                    { text: "A. Redefine the class in your own code.", correct: false },
-                    { text: "B. Import the package that contains the class.", correct: true },
-                    { text: "C. Create a new instance of the class without any import.", correct: false },
-                    { text: "D. Change the class's access modifier to public.", correct: false },
-                ],
-            },
-            {
-                question: "24. Which of the following classes is NOT typically used for reading input from the Java console?",
-                answers: [
-                    { text: "A. Scanner", correct: false },
-                    { text: "B. BufferedReader", correct: false },
-                    { text: "C. Console", correct: false },
-                    { text: "D. JOptionPane", correct: true },
-                ],
-            },
-            {
-                question: "25. What is one major advantage of using the Scanner class for input?",
-                answers: [
-                    { text: "A. It is synchronized, ensuring thread safety during input operations.", correct: false },
-                    { text: "B. It provides built-in methods like nextInt(), nextFloat(), etc., for parsing tokens from input.", correct: true },
-                    { text: "C. It requires no import statement to use.", correct: false },
-                    { text: "D. It automatically buffers large amounts of input data without any extra code.", correct: false },
-                ],
-            },
-            {
-                question: "26. One drawback of using the Scanner class is that its reading methods are:",
-                answers: [
-                    { text: "A. Too complex for beginners to use.", correct: false },
-                    { text: "B. Not synchronized, which may affect multi-threaded applications.", correct: true },
-                    { text: "C. Only compatible with numeric input.", correct: false },
-                    { text: "D. Only available in older versions of Java.", correct: false },
-                ],
-            },
-            {
-                question: "27. Which Java class is used to display simple graphical dialog boxes for input and output?",
-                answers: [
-                    { text: "A. Console", correct: false },
-                    { text: "B. BufferedReader", correct: false },
-                    { text: "C. Scanner", correct: false },
-                    { text: "D. JOptionPane", correct: true },
-                ],
-            },
-            {
-                question: "28. In the context of Java libraries, what is a class?",
-                answers: [
-                    { text: "A. A blueprint or template that describes the behavior and state that objects of its type support.", correct: true },
-                    { text: "B. A collection of precompiled routines.", correct: false },
-                    { text: "C. A specific method used to read data from the console.", correct: false },
-                    { text: "D. A package of functions written in another programming language.", correct: false },
-                ],
-            },
-            {
-                question: "29. Which statement about Java strings is correct?",
-                answers: [
-                    { text: "A. Strings in Java are treated as primitive types.", correct: false },
-                    { text: "B. Strings in Java are objects and come with built-in methods like length(), compareTo(), trim(), etc.", correct: true },
-                    { text: "C. Java strings cannot be converted to other types such as int or Boolean.", correct: false },
-                    { text: "D. Strings do not support any operations and must be manipulated using external libraries.", correct: false },
-                ],
-            },
-            {
-                question: "30. What does the method length() do when called on a Java string?",
-                answers: [
-                    { text: "A. It returns the string converted to uppercase.", correct: false },
-                    { text: "B. It returns the number of characters contained in the string.", correct: true },
-                    { text: "C. It trims the whitespace from both ends of the string.", correct: false },
-                    { text: "D. It compares the string to another string.", correct: false },
-                ],
-            },
-            {
-                question: "31. In a Java application that computes the hypotenuse of a right triangle using user input, which input technique might be used?",
-                answers: [
-                    { text: "A. Reading from a text file using FileReader only.", correct: false },
-                    { text: "B. Using the Scanner class to parse numeric values entered via the console.", correct: true },
-                    { text: "C. Directly hardcoding the values with no user input.", correct: false },
-                    { text: "D. Only using the BufferedReader without any conversion.", correct: false },
-                ],
-            },
-            // New Questions (Set 4: Algorithms and Selection Statements)
-            {
-                question: "32. What is an algorithm?",
-                answers: [
-                    { text: "A. A tool for compiling Java code.", correct: false },
-                    { text: "B. A procedure for solving a problem by specifying a series of actions and the order in which they execute.", correct: true },
-                    { text: "C. A graphical user interface for input/output.", correct: false },
-                    { text: "D. A method for debugging code.", correct: false },
-                ],
-            },
-            {
-                question: "33. Which of the following best illustrates the importance of specifying the correct order of actions in an algorithm?",
-                answers: [
-                    { text: "A. Writing code without comments.", correct: false },
-                    { text: "B. The “rise-and-shine” routine (e.g., get out of bed, take off pajamas, shower, dress, eat breakfast, carpool) to get ready for work.", correct: true },
-                    { text: "C. Using a for loop for repeated actions.", correct: false },
-                    { text: "D. Importing the necessary Java packages.", correct: false },
-                ],
-            },
-            {
-                question: "34. Which of these is NOT a type of selection statement in Java?",
-                answers: [
-                    { text: "A. if", correct: false },
-                    { text: "B. if…else", correct: false },
-                    { text: "C. switch", correct: false },
-                    { text: "D. for", correct: true },
-                ],
-            },
-            {
-                question: "35. The if statement in Java is best described as a:",
-                answers: [
-                    { text: "A. Multiple-selection statement.", correct: false },
-                    { text: "B. Double-selection statement.", correct: false },
-                    { text: "C. Single-selection statement.", correct: true },
-                    { text: "D. Looping statement.", correct: false },
-                ],
-            },
-            {
-                question: "36. Which statement correctly distinguishes the if…else statement?",
-                answers: [
-                    { text: "A. It selects between zero actions and multiple actions.", correct: false },
-                    { text: "B. It selects between two different actions based on whether a condition is true or false.", correct: true },
-                    { text: "C. It is only used for executing one single action.", correct: false },
-                    { text: "D. It is identical to the switch statement.", correct: false },
-                ],
-            },
-            {
-                question: "37. What is a key advantage of using a switch statement?",
-                answers: [
-                    { text: "A. It can execute multiple actions concurrently.", correct: false },
-                    { text: "B. It simplifies the code when selecting among several alternatives, making it ideal for menu-driven applications.", correct: true },
-                    { text: "C. It always executes the default case.", correct: false },
-                    { text: "D. It is used to iterate through collections.", correct: false },
-                ],
-            },
-            {
-                question: "38. Which of the following is NOT a repetition (loop) statement in Java?",
-                answers: [
-                    { text: "A. while", correct: false },
-                    { text: "B. do…while", correct: false },
-                    { text: "C. for", correct: false },
-                    { text: "D. if", correct: true },
-                ],
-            },
-            {
-                question: "39. How does the do…while loop differ from the while and for loops?",
-                answers: [
-                    { text: "A. It executes its body only if the loop condition is false.", correct: false },
-                    { text: "B. It executes its body one or more times, ensuring the loop body runs at least once.", correct: true },
-                    { text: "C. It does not require a loop-continuation condition.", correct: false },
-                    { text: "D. It does not support nested loops.", correct: false },
-                ],
-            },
-            {
-                question: "40. What is the purpose of using nested if statements?",
-                answers: [
-                    { text: "A. To simplify code by replacing loops.", correct: false },
-                    { text: "B. To allow for multiple levels of decision-making where one condition is checked inside another.", correct: true },
-                    { text: "C. To perform arithmetic operations.", correct: false },
-                    { text: "D. To create a GUI interface.", correct: false },
-                ],
-            },
-            {
-                question: "41. Which of the following best describes the switch statement structure?",
-                answers: [
-                    { text: "A. It uses only one case and ignores the default.", correct: false },
-                    { text: "B. It tests the value of an expression against a list of constants, executing the associated statement sequence when a match is found, and often uses break statements to exit.", correct: true },
-                    { text: "C. It always executes every case regardless of the expression value.", correct: false },
-                    { text: "D. It is used for defining variables.", correct: false },
-                ],
-            },
-            // New Questions (Set 5: Repetition Statements)
-            {
-                question: "42. What is the primary purpose of a repetition (loop) statement in Java?",
-                answers: [
-                    { text: "A. To execute a block of code only once.", correct: false },
-                    { text: "B. To repeat a block of code as long as a specified condition remains true.", correct: true },
-                    { text: "C. To decide between multiple alternative actions.", correct: false },
-                    { text: "D. To import external libraries.", correct: false },
-                ],
-            },
-            {
-                question: "43. Which of the following best describes the behavior of a while loop?",
-                answers: [
-                    { text: "A. It checks the loop-continuation condition after executing the loop body.", correct: false },
-                    { text: "B. It checks the loop-continuation condition before executing the loop body, so the body may not execute at all if the condition is false.", correct: true },
-                    { text: "C. It always executes the loop body exactly once regardless of the condition.", correct: false },
-                    { text: "D. It is used only for iterating over arrays.", correct: false },
-                ],
-            },
-            {
-                question: "44. Which loop guarantees that its body is executed at least once?",
-                answers: [
-                    { text: "A. while loop", correct: false },
-                    { text: "B. for loop", correct: false },
-                    { text: "C. do…while loop", correct: true },
-                    { text: "D. nested for loop", correct: false },
-                ],
-            },
-            {
-                question: "45. In a for loop, which part is NOT included in its header?",
-                answers: [
-                    { text: "A. Initialization", correct: false },
-                    { text: "B. Loop-continuation condition", correct: false },
-                    { text: "C. Increment/decrement expression", correct: false },
-                    { text: "D. Body of the loop", correct: true },
-                ],
-            }
-        ];
+   
+    const quizData = [
+        {
+            question: "1. What is the correct syntax for declaring a variable in Java?",
+            answers: [
+                { text: "A. int x = 10;", correct: true },
+                { text: "B. var x = 10;", correct: false },
+                { text: "C. x = 10;", correct: false },
+                { text: "D. int x;", correct: false },
+            ],
+        },
+        {
+            question: "2. Which keyword is used to define a class in Java?",
+            answers: [
+                { text: "A. interface", correct: false },
+                { text: "B. class", correct: true },
+                { text: "C. struct", correct: false },
+                { text: "D. object", correct: false },
+            ],
+        },
+        {
+            question: "3. What is the default value of an uninitialized integer variable in Java?",
+            answers: [
+                { text: "A. null", correct: false },
+                { text: "B. 1", correct: false },
+                { text: "C. 0", correct: true },
+                { text: "D. undefined", correct: false },
+            ],
+        },
+        {
+            question: "4. Which of the following is NOT a primitive data type in Java?",
+            answers: [
+                { text: "A. int", correct: false },
+                { text: "B. float", correct: false },
+                { text: "C. String", correct: true },
+                { text: "D. boolean", correct: false },
+            ],
+        },
+        {
+            question: "5. What is the output of `System.out.println(5 + \"5\");` in Java?",
+            answers: [
+                { text: "A. 10", correct: false },
+                { text: "B. 55", correct: true },
+                { text: "C. \"55\"", correct: false },
+                { text: "D. Error", correct: false },
+            ],
+        },
+        // New Questions (Set 1)
+        {
+            question: "6. Which of the following best describes one of Java’s key advantages regarding simplicity?",
+            answers: [
+                { text: "A. Java’s syntax is entirely different from C++ to avoid confusion.", correct: false },
+                { text: "B. Java is easy to write, more readable, and most concepts are drawn from C++ for simplicity.", correct: true },
+                { text: "C. Java programs always require fewer lines of code than other languages.", correct: false },
+                { text: "D. Java uses assembly language for optimal performance.", correct: false },
+            ],
+        },
+        {
+            question: "7. What makes Java a secure programming language?",
+            answers: [
+                { text: "A. Java programs are compiled directly to machine code, making them secure.", correct: false },
+                { text: "B. Java programs are not allowed to use any user input.", correct: false },
+                { text: "C. Java provides a secure means of creating Internet and web applications, preventing harm to other systems.", correct: true },
+                { text: "D. Java programs run without any runtime checks, making them secure by default.", correct: false },
+            ],
+        },
+        {
+            question: "8. Which statement correctly describes the portability of Java?",
+            answers: [
+                { text: "A. Java programs only run on Windows and Mac.", correct: false },
+                { text: "B. Java programs can execute on any platform that has a Java Virtual Machine (JVM).", correct: true },
+                { text: "C. Java is portable only if the code is rewritten for each platform.", correct: false },
+                { text: "D. Java programs can only be transferred via physical media.", correct: false },
+            ],
+        },
+        {
+            question: "9. In terms of object orientation, what is a key difference between Java and C++?",
+            answers: [
+                { text: "A. Java does not support object-oriented programming at all.", correct: false },
+                { text: "B. Java is a purely object-oriented language, while C++ is only partially object-oriented.", correct: true },
+                { text: "C. C++ is more object-oriented than Java because it supports classes.", correct: false },
+                { text: "D. Both Java and C++ are purely procedural languages.", correct: false },
+            ],
+        },
+        {
+            question: "10. What does the term “multithreaded” in Java imply?",
+            answers: [
+                { text: "A. Java only supports a single thread of execution at a time.", correct: false },
+                { text: "B. Java supports running multiple threads concurrently, which is built into the language.", correct: true },
+                { text: "C. Java requires external libraries to manage threads.", correct: false },
+                { text: "D. Java threads can only run on Linux systems.", correct: false },
+            ],
+        },
+        {
+            question: "11. Which Java edition is primarily used for developing desktop applications?",
+            answers: [
+                { text: "A. Java ME", correct: false },
+                { text: "B. Java EE", correct: false },
+                { text: "C. Java SE", correct: true },
+                { text: "D. Java BE", correct: false },
+            ],
+        },
+        {
+            question: "12. What are the two main elements that each Java edition consists of?",
+            answers: [
+                { text: "A. JVM and bytecode", correct: false },
+                { text: "B. JDK and applets", correct: false },
+                { text: "C. JRE and JDK", correct: true },
+                { text: "D. JDK and IDE", correct: false },
+            ],
+        },
+        {
+            question: "13. What is the main difference between a compiler and an interpreter in Java?",
+            answers: [
+                { text: "A. A Java program is only interpreted and never compiled.", correct: false },
+                { text: "B. Compilation happens every time the program is executed.", correct: false },
+                { text: "C. A Java program is both compiled (once) and interpreted (each execution).", correct: true },
+                { text: "D. Java uses a compiler for desktop apps and an interpreter for web apps.", correct: false },
+            ],
+        },
+        {
+            question: "14. Which of the following is true about Java comments?",
+            answers: [
+                { text: "A. They are executed as part of the program.", correct: false },
+                { text: "B. They improve code readability and are ignored during execution.", correct: true },
+                { text: "C. Only single-line comments are allowed in Java.", correct: false },
+                { text: "D. Comments can only be placed at the beginning of a Java file.", correct: false },
+            ],
+        },
+        {
+            question: "15. Which of these is a valid Java identifier for a variable name?",
+            answers: [
+                { text: "A. 7button", correct: false },
+                { text: "B. Welcome1", correct: true },
+                { text: "C. my variable", correct: false },
+                { text: "D. public", correct: false },
+            ],
+        },
+        // New Questions (Set 2: Data Types & Operators)
+        {
+            question: "16. What is the primary purpose of a data type in programming?",
+            answers: [
+                { text: "A. To increase the speed of execution.", correct: false },
+                { text: "B. To tell the compiler or interpreter how the programmer intends to use the data.", correct: true },
+                { text: "C. To provide a user interface for input.", correct: false },
+                { text: "D. To automatically generate documentation.", correct: false },
+            ],
+        },
+        {
+            question: "17. Which of the following statements about Java being a strongly typed language is correct?",
+            answers: [
+                { text: "A. Java allows any operation without checking data types.", correct: false },
+                { text: "B. All variables, expressions, and values in Java have a type, and illegal operations will not compile.", correct: true },
+                { text: "C. Java only checks data types at runtime.", correct: false },
+                { text: "D. Java automatically converts data types during arithmetic operations without any error.", correct: false },
+            ],
+        },
+        {
+            question: "18. Which of the following best describes the two general categories of built-in data types in Java?",
+            answers: [
+                { text: "A. Numeric and non-numeric.", correct: false },
+                { text: "B. Primitive (non object oriented) and object oriented.", correct: true },
+                { text: "C. Local and global.", correct: false },
+                { text: "D. Static and dynamic.", correct: false },
+            ],
+        },
+        {
+            question: "19. What are the three general classes of operators in Java?",
+            answers: [
+                { text: "A. Arithmetic, relational, and logical.", correct: true },
+                { text: "B. Bitwise, memory, and stack.", correct: false },
+                { text: "C. Unary, binary, and ternary.", correct: false },
+                { text: "D. Assignment, loop, and condition.", correct: false },
+            ],
+        },
+        {
+            question: "20. In Java, what is the result of the expression 7 / 5 when performed as integer division?",
+            answers: [
+                { text: "A. 1.4", correct: false },
+                { text: "B. 2", correct: false },
+                { text: "C. 1", correct: true },
+                { text: "D. 0", correct: false },
+            ],
+        },
+        {
+            question: "21. What does the modulus operator (%) return in Java? For example, what is 7 % 5?",
+            answers: [
+                { text: "A. 5", correct: false },
+                { text: "B. 2", correct: true },
+                { text: "C. 1", correct: false },
+                { text: "D. 7", correct: false },
+            ],
+        },
+        // New Questions (Set 3: Packages, Input, and Strings)
+        {
+            question: "22. What is a Java package?",
+            answers: [
+                { text: "A. A collection of files containing precompiled routines (classes) that a program can use.", correct: true },
+                { text: "B. A single file containing the source code for an application.", correct: false },
+                { text: "C. A runtime environment for executing Java programs.", correct: false },
+                { text: "D. A tool for compiling Java source code.", correct: false },
+            ],
+        },
+        {
+            question: "23. To use a predefined class in a Java application, you must first:",
+            answers: [
+                { text: "A. Redefine the class in your own code.", correct: false },
+                { text: "B. Import the package that contains the class.", correct: true },
+                { text: "C. Create a new instance of the class without any import.", correct: false },
+                { text: "D. Change the class's access modifier to public.", correct: false },
+            ],
+        },
+        {
+            question: "24. Which of the following classes is NOT typically used for reading input from the Java console?",
+            answers: [
+                { text: "A. Scanner", correct: false },
+                { text: "B. BufferedReader", correct: false },
+                { text: "C. Console", correct: false },
+                { text: "D. JOptionPane", correct: true },
+            ],
+        },
+        {
+            question: "25. What is one major advantage of using the Scanner class for input?",
+            answers: [
+                { text: "A. It is synchronized, ensuring thread safety during input operations.", correct: false },
+                { text: "B. It provides built-in methods like nextInt(), nextFloat(), etc., for parsing tokens from input.", correct: true },
+                { text: "C. It requires no import statement to use.", correct: false },
+                { text: "D. It automatically buffers large amounts of input data without any extra code.", correct: false },
+            ],
+        },
+        // New Questions (Set 3 continues)
+        {
+            question: "26. One drawback of using the Scanner class is that its reading methods are:",
+            answers: [
+                { text: "A. Too complex for beginners to use.", correct: false },
+                { text: "B. Not synchronized, which may affect multi-threaded applications.", correct: true },
+                { text: "C. Only compatible with numeric input.", correct: false },
+                { text: "D. Only available in older versions of Java.", correct: false },
+            ],
+        },
+        {
+            question: "27. Which Java class is used to display simple graphical dialog boxes for input and output?",
+            answers: [
+                { text: "A. Console", correct: false },
+                { text: "B. BufferedReader", correct: false },
+                { text: "C. Scanner", correct: false },
+                { text: "D. JOptionPane", correct: true },
+            ],
+        },
+        {
+            question: "28. In the context of Java libraries, what is a class?",
+            answers: [
+                { text: "A. A blueprint or template that describes the behavior and state that objects of its type support.", correct: true },
+                { text: "B. A collection of precompiled routines.", correct: false },
+                { text: "C. A specific method used to read data from the console.", correct: false },
+                { text: "D. A package of functions written in another programming language.", correct: false },
+            ],
+        },
+        {
+            question: "29. Which statement about Java strings is correct?",
+            answers: [
+                { text: "A. Strings in Java are treated as primitive types.", correct: false },
+                { text: "B. Strings in Java are objects and come with built-in methods like length(), compareTo(), trim(), etc.", correct: true },
+                { text: "C. Java strings cannot be converted to other types such as int or Boolean.", correct: false },
+                { text: "D. Strings do not support any operations and must be manipulated using external libraries.", correct: false },
+            ],
+        },
+        {
+            question: "30. What does the method length() do when called on a Java string?",
+            answers: [
+                { text: "A. It returns the string converted to uppercase.", correct: false },
+                { text: "B. It returns the number of characters contained in the string.", correct: true },
+                { text: "C. It trims the whitespace from both ends of the string.", correct: false },
+                { text: "D. It compares the string to another string.", correct: false },
+            ],
+        },
+        {
+            question: "31. In a Java application that computes the hypotenuse of a right triangle using user input, which input technique might be used?",
+            answers: [
+                { text: "A. Reading from a text file using FileReader only.", correct: false },
+                { text: "B. Using the Scanner class to parse numeric values entered via the console.", correct: true },
+                { text: "C. Directly hardcoding the values with no user input.", correct: false },
+                { text: "D. Only using the BufferedReader without any conversion.", correct: false },
+            ],
+        },
+        // New Questions (Set 4: Algorithms and Selection Statements)
+        {
+            question: "32. What is an algorithm?",
+            answers: [
+                { text: "A. A tool for compiling Java code.", correct: false },
+                { text: "B. A procedure for solving a problem by specifying a series of actions and the order in which they execute.", correct: true },
+                { text: "C. A graphical user interface for input/output.", correct: false },
+                { text: "D. A method for debugging code.", correct: false },
+            ],
+        },
+        {
+            question: "33. Which of the following best illustrates the importance of specifying the correct order of actions in an algorithm?",
+            answers: [
+                { text: "A. Writing code without comments.", correct: false },
+                { text: "B. The “rise-and-shine” routine (e.g., get out of bed, take off pajamas, shower, dress, eat breakfast, carpool) to get ready for work.", correct: true },
+                { text: "C. Using a for loop for repeated actions.", correct: false },
+                { text: "D. Importing the necessary Java packages.", correct: false },
+            ],
+        },
+        {
+            question: "34. Which of these is NOT a type of selection statement in Java?",
+            answers: [
+                { text: "A. if", correct: false },
+                { text: "B. if…else", correct: false },
+                { text: "C. switch", correct: false },
+                { text: "D. for", correct: true },
+            ],
+        },
+        {
+            question: "35. The if statement in Java is best described as a:",
+            answers: [
+                { text: "A. Multiple-selection statement.", correct: false },
+                { text: "B. Double-selection statement.", correct: false },
+                { text: "C. Single-selection statement.", correct: true },
+                { text: "D. Looping statement.", correct: false },
+            ],
+        },
+        {
+            question: "36. Which statement correctly distinguishes the if…else statement?",
+            answers: [
+                { text: "A. It selects between zero actions and multiple actions.", correct: false },
+                { text: "B. It selects between two different actions based on whether a condition is true or false.", correct: true },
+                { text: "C. It is only used for executing one single action.", correct: false },
+                { text: "D. It is identical to the switch statement.", correct: false },
+            ],
+        },
+        {
+            question: "37. What is a key advantage of using a switch statement?",
+            answers: [
+                { text: "A. It can execute multiple actions concurrently.", correct: false },
+                { text: "B. It simplifies the code when selecting among several alternatives, making it ideal for menu-driven applications.", correct: true },
+                { text: "C. It always executes the default case.", correct: false },
+                { text: "D. It is used to iterate through collections.", correct: false },
+            ],
+        },
+        {
+            question: "38. Which of the following is NOT a repetition (loop) statement in Java?",
+            answers: [
+                { text: "A. while", correct: false },
+                { text: "B. do…while", correct: false },
+                { text: "C. for", correct: false },
+                { text: "D. if", correct: true },
+            ],
+        },
+        {
+            question: "39. How does the do…while loop differ from the while and for loops?",
+            answers: [
+                { text: "A. It executes its body only if the loop condition is false.", correct: false },
+                { text: "B. It executes its body one or more times, ensuring the loop body runs at least once.", correct: true },
+                { text: "C. It does not require a loop-continuation condition.", correct: false },
+                { text: "D. It does not support nested loops.", correct: false },
+            ],
+        },
+        {
+            question: "40. What is the purpose of using nested if statements?",
+            answers: [
+                { text: "A. To simplify code by replacing loops.", correct: false },
+                { text: "B. To allow for multiple levels of decision-making where one condition is checked inside another.", correct: true },
+                { text: "C. To perform arithmetic operations.", correct: false },
+                { text: "D. To create a GUI interface.", correct: false },
+            ],
+        },
+        {
+            question: "41. Which of the following best describes the switch statement structure?",
+            answers: [
+                { text: "A. It uses only one case and ignores the default.", correct: false },
+                { text: "B. It tests the value of an expression against a list of constants, executing the associated statement sequence when a match is found, and often uses break statements to exit.", correct: true },
+                { text: "C. It always executes every case regardless of the expression value.", correct: false },
+                { text: "D. It is used for defining variables.", correct: false },
+            ],
+        },
+        // New Questions (Set 5: Repetition Statements)
+        {
+            question: "42. What is the primary purpose of a repetition (loop) statement in Java?",
+            answers: [
+                { text: "A. To execute a block of code only once.", correct: false },
+                { text: "B. To repeat a block of code as long as a specified condition remains true.", correct: true },
+                { text: "C. To decide between multiple alternative actions.", correct: false },
+                { text: "D. To import external libraries.", correct: false },
+            ],
+        },
+        {
+            question: "43. Which of the following best describes the behavior of a while loop?",
+            answers: [
+                { text: "A. It checks the loop-continuation condition after executing the loop body.", correct: false },
+                { text: "B. It checks the loop-continuation condition before executing the loop body, so the body may not execute at all if the condition is false.", correct: true },
+                { text: "C. It always executes the loop body exactly once regardless of the condition.", correct: false },
+                { text: "D. It is used only for iterating over arrays.", correct: false },
+            ],
+        },
+        {
+            question: "44. Which loop guarantees that its body is executed at least once?",
+            answers: [
+                { text: "A. while loop", correct: false },
+                { text: "B. for loop", correct: false },
+                { text: "C. do…while loop", correct: true },
+                { text: "D. nested for loop", correct: false },
+            ],
+        },
+        {
+            question: "45. In a for loop, which part is NOT included in its header?",
+            answers: [
+                { text: "A. Initialization", correct: false },
+                { text: "B. Loop-continuation condition", correct: false },
+                { text: "C. Increment/decrement expression", correct: false },
+                { text: "D. Body of the loop", correct: true },
+            ],
+        }
+    ];
 
-        let currentQuestionIndex = 0;
-        let score = 0;
-        const questionText = document.getElementById("question-text");
-        const answersContainer = document.getElementById("answers");
-        const nextButton = document.getElementById("next-button");
-        const correctSound = document.getElementById("correct-sound");
-        const incorrectSound = document.getElementById("incorrect-sound");
+    let currentQuestionIndex = 0;
+    let score = 0;
+    const questionText = document.getElementById("question-text");
+    const answersContainer = document.getElementById("answers");
+    const nextButton = document.getElementById("next-button");
+    const correctSound = document.getElementById("correct-sound");
+    const incorrectSound = document.getElementById("incorrect-sound");
 
-        function loadQuestion() {
-            const currentQuestion = quizData[currentQuestionIndex];
-            questionText.textContent = currentQuestion.question;
-            answersContainer.innerHTML = "";
-            nextButton.disabled = true;
+    // Load the current question and its answers
+    function loadQuestion() {
+        const currentQuestion = quizData[currentQuestionIndex];
+        questionText.textContent = currentQuestion.question;
+        answersContainer.innerHTML = "";
+        nextButton.disabled = true;
 
-            currentQuestion.answers.forEach((answer) => {
-                const button = document.createElement("button");
-                button.textContent = answer.text;
-                button.classList.add("answer-button");
-                button.dataset.correct = answer.correct;
-                button.addEventListener("click", selectAnswer);
-                answersContainer.appendChild(button);
-            });
+        currentQuestion.answers.forEach((answer) => {
+            const button = document.createElement("button");
+            button.textContent = answer.text;
+            button.classList.add("answer-button");
+            button.dataset.correct = answer.correct;
+            button.addEventListener("click", selectAnswer);
+            answersContainer.appendChild(button);
+        });
+    }
+
+    // Handle answer selection and update score
+    function selectAnswer(event) {
+        const selectedButton = event.target;
+        const isCorrect = selectedButton.dataset.correct === "true";
+
+        if (isCorrect) {
+            selectedButton.classList.add("correct");
+            correctSound.play();
+            score++;
+        } else {
+            selectedButton.classList.add("incorrect");
+            incorrectSound.play();
         }
 
-        function selectAnswer(event) {
-            const selectedButton = event.target;
-            const isCorrect = selectedButton.dataset.correct === "true";
-
-            if (isCorrect) {
-                selectedButton.classList.add("correct");
-                correctSound.play();
-                score++;
-            } else {
-                selectedButton.classList.add("incorrect");
-                incorrectSound.play();
-            }
-
-            Array.from(answersContainer.children).forEach((button) => {
-                button.disabled = true;
-            });
-
-            nextButton.disabled = false;
-        }
-
-        nextButton.addEventListener("click", () => {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < quizData.length) {
-                loadQuestion();
-            } else {
-                showScore();
-            }
+        // Disable all answer buttons after selection
+        Array.from(answersContainer.children).forEach((button) => {
+            button.disabled = true;
         });
 
-        function showScore() {
-            // Clear out previous quiz elements
-            questionText.textContent = "Quiz Completed!";
-            answersContainer.innerHTML = `<p style="font-size:45px;">Your Score: ${score} / ${quizData.length}</p>`;
-            nextButton.style.display = "none";
+        nextButton.disabled = false;
+    }
 
-            // Create Repeat Quiz button (green)
-            const repeatButton = document.createElement("button");
-            repeatButton.textContent = "Repeat Quiz";
-            repeatButton.classList.add("repeat-button");
-            repeatButton.addEventListener("click", () => {
-                // Reset quiz values and reload first question
-                currentQuestionIndex = 0;
-                score = 0;
-                nextButton.style.display = "block";
-                loadQuestion();
-            });
-            answersContainer.appendChild(repeatButton);
-
-            // Create Back to Menu button (wheat color)
-            const backButton = document.createElement("button");
-            backButton.textContent = "Back to Menu";
-            backButton.classList.add("back-button");
-            backButton.addEventListener("click", () => {
-                window.location.href = "mainpage.html";
-            });
-            answersContainer.appendChild(backButton);
+    // Modify the nextButton event listener to check for 25 questions
+    nextButton.addEventListener("click", () => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex === 25 && quizData.length > 25) {
+            askContinue();
+        } else if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showScore();
         }
+    });
 
+    // Updated askContinue function with improved alignment for the prompt buttons
+    function askContinue() {
+        // Hide the nextButton temporarily
+        nextButton.style.display = "none";
+        answersContainer.innerHTML = "";
+
+        // Create a container for the prompt buttons with centered alignment
+        const promptDiv = document.createElement("div");
+        promptDiv.style.display = "flex";
+        promptDiv.style.justifyContent = "center";
+        promptDiv.style.alignItems = "center";
+        promptDiv.style.gap = "20px";
+        promptDiv.style.margin = "30px auto";
+        promptDiv.style.width = "855px"; // maintain the same width as other buttons
+        promptDiv.style.marginLeft = "-50px"; 
+
+        // Create the Continue Quiz button
+        const continueButton = document.createElement("button");
+        continueButton.textContent = "Continue Quiz";
+        continueButton.classList.add("next-button");
+        continueButton.style.width = "600px"; // ensure consistent width
+        continueButton.addEventListener("click", () => {
+            promptDiv.remove();
+            nextButton.style.display = "block";
+            loadQuestion();
+        });
+
+        // Create the End Quiz button
+        const endButton = document.createElement("button");
+        endButton.textContent = "End Quiz";
+        endButton.classList.add("back-button");
+        endButton.style.width = "600px";
+        endButton.addEventListener("click", () => {
+            promptDiv.remove();
+            showScore();
+        });
+
+        promptDiv.appendChild(continueButton);
+        promptDiv.appendChild(endButton);
+        answersContainer.appendChild(promptDiv);
+    }
+
+    // Show the final score and display options to restart or return to the menu
+    function showScore() {
+    questionText.textContent = "Quiz Completed!";
+    answersContainer.innerHTML = `<p style="font-size:45px; text-align:center;">Your Score: ${score} / ${quizData.length}</p>`;
+    nextButton.style.display = "none";
+
+    // Create a container for the final buttons and center them
+    const finalDiv = document.createElement("div");
+    finalDiv.style.display = "flex";
+    finalDiv.style.flexDirection = "column";   // stack buttons vertically; change to "row" if needed
+    finalDiv.style.alignItems = "center";        // center buttons horizontally
+    finalDiv.style.justifyContent = "center";
+    finalDiv.style.gap = "20px";  
+    finalDiv.style.marginLeft = "-120px";               // space between buttons
+    finalDiv.style.marginTop = "30px";
+
+    // Create Repeat Quiz button (green)
+    const repeatButton = document.createElement("button");
+    repeatButton.textContent = "Repeat Quiz";
+    repeatButton.classList.add("repeat-button");
+    repeatButton.style.width = "600px";  // ensures consistent width
+    repeatButton.addEventListener("click", () => {
+        currentQuestionIndex = 0;
+        score = 0;
+        nextButton.style.display = "block";
         loadQuestion();
+    });
+    finalDiv.appendChild(repeatButton);
 
-        const toggleImg = document.getElementById("toggleImg");
-        const body = document.body;
+    // Create Back to Menu button (wheat color)
+    const backButton = document.createElement("button");
+    backButton.textContent = "Back to Menu";
+    backButton.classList.add("back-button");
+    backButton.style.width = "600px";
+    backButton.addEventListener("click", () => {
+        window.location.href = "mainpage.html";
+    });
+    finalDiv.appendChild(backButton);
 
-        toggleImg.addEventListener("click", () => {
-            body.classList.toggle("light-mode");
-            toggleImg.src = body.classList.contains("light-mode") ? "night-mode.png" : "brightness.png";
-        });
+    answersContainer.appendChild(finalDiv);
+}
+
+
+    // Initialize the quiz by loading the first question
+    loadQuestion();
+
+    // Toggle light and dark mode
+    const toggleImg = document.getElementById("toggleImg");
+    const body = document.body;
+
+    toggleImg.addEventListener("click", () => {
+        body.classList.toggle("light-mode");
+        toggleImg.src = body.classList.contains("light-mode") ? "night-mode.png" : "brightness.png";
+    });
+
+
     </script>
 </body>
 </html>
