@@ -87,15 +87,8 @@
         </style>
     </head>
     <body>
-        <!-- This script block checks for a stored username. If found, it redirects to mainpage.html -->
-        <script>
-            if(localStorage.getItem("username")) {
-                window.location.href = "mainpage.html";
-            }
-        </script>
-
         <h2 class="heading">QBank</h2>
-        <img src="Picture1.png" alt="Picture1">
+        <img src="Picture1.png">
         <p class="etext">Hi there! My name is PioBot, and I’m here to make your study experience awesome. To get started, tell me your name.</p>
         <input type="text" id="username" placeholder="Enter your name here">
         <button class="submit" id="submitBtn" disabled>Submit</button>
@@ -109,9 +102,7 @@
                 // Read the text aloud using the Web Speech API
                 const textToSpeak = etextElement.textContent;
                 const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                const voices = speechSynthesis.getVoices();
-                // Optionally select a specific voice if available
-                utterance.voice = voices.find(voice => voice.name === "Google US English") || voices[0];
+                utterance.voice = speechSynthesis.getVoices().find(voice => voice.name === "Google US English"); // Optional: Set a specific voice
                 speechSynthesis.speak(utterance);
             }, 2000); // 2-second delay for text
 
@@ -140,7 +131,7 @@
             submitButton.addEventListener("click", () => {
                 const username = usernameInput.value.trim();
                 if (username) {
-                    localStorage.setItem("username", username); // Save the name for future visits
+                    localStorage.setItem("username", username); // Save the name
                     window.location.href = "mainpage.html"; // Redirect to the main page
                 }
             });
